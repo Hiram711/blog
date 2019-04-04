@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Markdown基本语法]]></title>
+    <url>%2Fblog%2F2019%2F03%2F28%2FA-Test-Post%2F</url>
+    <content type="text"><![CDATA[记录一下常用的markdown语法，just for convenience! 字体 语法 结果 *斜体* 斜体 **加粗** 加粗 ~~删除线~~ 删除线 字体下&lt;sub&gt;logo&lt;/sub&gt;标 字体下logo标 字体上&lt;sup&gt;logo&lt;/sup&gt;标 字体上logo标 &lt;u&gt;下划线&lt;/u&gt; 下划线 格式控制与转义字符 换行：使用连续两个回车或者&lt;br&gt;标签 缩进：使用转义字符中的空格 对齐：使用&lt;p align=”left/center/right”&gt;&lt;/p&gt;控制 转义：一般情况下使用\+需要转义的字符进行转义，部分字符需要使用下列转义字符表 转义字符 效果 解释 &amp;nbsp; &nbsp;缩进 不换行空格 &amp;ensp; &ensp;缩进 半角空格 &amp;emsp; &emsp;缩进 全角空格 &amp; &amp; 与号 &lt; &lt; 小于符号 &gt; &gt; 大于符号 标题1到6个#号表示从大到小6个级别的标题 分割线空行中三个以上的*号或者减号或者下划线为一个分割线，例如： 注释语法： &lt;!–注释–&gt; 效果： 注释不会被显示。 代码块行内代码语法： 这句`print(Hello world!)`是行内代码 效果： 这句print(Hello world!)是行内代码 代码框语法： ```bash ls -a ``` 效果：1ls -a 引用语法: > 引用1 > > 引用2 > > > 引用3 效果: 引用1 引用2 引用3 备注:引用作为一个区块，可以在区块内部嵌套使用列表、代码块、标题等，例如： 引用1（标题） 引用2（列表） 1引用3（代码块） 列表无序列表语法：+ list1 + list2 + list3 效果: list1 list2 list3 有序列表语法： 1. list1 2. list2 3. list3 效果: list1 list2 list3 备注:有序列表的序号是根据第一个列表项的序号自增的，比如第一个列表项的序号为3，那么不管之后的列表项的序号是多少，都会是4，5，6…… 表格语法： col1|col2|col3 :-|:-|:- dt|dt|dt dt|dt|dt dt|dt|dt 效果： col1 col2 col3 dt dt dt dt dt dt dt dt dt 备注：通过在第二行中调整冒号与横线实现表格对齐，具体如下： :- （左对齐） :-:（居中） -:（右对齐） 链接语法： [链接文字](链接地址) [链接文字](链接地址 “链接说明”) 效果： 链接文字 链接文字 图片语法： ![链接图片](链接地址) 效果：]]></content>
+      <categories>
+        <category>markdown</category>
+      </categories>
+      <tags>
+        <tag>markdown</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Hello World]]></title>
-    <url>%2Fblog%2F2019%2F03%2F27%2Fhello-world%2F</url>
+    <url>%2Fblog%2F2019%2F03%2F28%2Fhello-world%2F</url>
     <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
   </entry>
 </search>
