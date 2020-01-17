@@ -103,24 +103,30 @@
 
 
 
-  <meta name="description" content="但屈指，流年偷换。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="categories">
-<meta property="og:url" content="https://hiram711.github.io/categories/index.html">
+  <meta name="description" content="Markowitz’s Mean-Variance Model Derivation in PythonInterested by “Lecture 3.Quadratic Programing and Portfolio Selection Theory”,I’ve consulted a number of books about Markowitz’s Mean-Variance Model">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Markowitz&#39;s Mean-Variance Model Derivation in Python">
+<meta property="og:url" content="https://hiram711.github.io/2020/01/17/Markowitz-s-Mean-Variance-Model-Derivation-in-Python/index.html">
 <meta property="og:site_name" content="几时">
-<meta property="og:description" content="但屈指，流年偷换。">
+<meta property="og:description" content="Markowitz’s Mean-Variance Model Derivation in PythonInterested by “Lecture 3.Quadratic Programing and Portfolio Selection Theory”,I’ve consulted a number of books about Markowitz’s Mean-Variance Model">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-28T05:53:56.138Z">
+<meta property="og:image" content="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/pic/item/5bafa40f4bfbfbed801fba1677f0f736afc31f10.jpg">
+<meta property="og:image" content="https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/pic/item/5366d0160924ab1880c26d5e3afae6cd7a890b86.jpg">
+<meta property="og:image" content="https://hiram711.github.io/blog/images/pasted-7.png">
+<meta property="og:image" content="https://hiram711.github.io/blog/images/pasted-6.png">
+<meta property="og:image" content="https://hiram711.github.io/2020/01/17/Markowitz-s-Mean-Variance-Model-Derivation-in-Python/efficient_frontier.png">
+<meta property="og:updated_time" content="2020-01-17T07:26:05.057Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="categories">
-<meta name="twitter:description" content="但屈指，流年偷换。">
+<meta name="twitter:title" content="Markowitz&#39;s Mean-Variance Model Derivation in Python">
+<meta name="twitter:description" content="Markowitz’s Mean-Variance Model Derivation in PythonInterested by “Lecture 3.Quadratic Programing and Portfolio Selection Theory”,I’ve consulted a number of books about Markowitz’s Mean-Variance Model">
+<meta name="twitter:image" content="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/pic/item/5bafa40f4bfbfbed801fba1677f0f736afc31f10.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="https://hiram711.github.io/categories/">
+  <link rel="canonical" href="https://hiram711.github.io/2020/01/17/Markowitz-s-Mean-Variance-Model-Derivation-in-Python/">
 
 
 
@@ -130,7 +136,7 @@
   };
 </script>
 
-  <title>categories | 几时</title>
+  <title>Markowitz's Mean-Variance Model Derivation in Python | 几时</title>
   
 
 
@@ -273,7 +279,7 @@
         
         
           
-          <li class="menu-item menu-item-categories menu-item-active">
+          <li class="menu-item menu-item-categories">
 
     
     
@@ -384,97 +390,265 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hiram711.github.io/blog/2020/01/17/Markowitz-s-Mean-Variance-Model-Derivation-in-Python/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="几时西风">
+      <meta itemprop="description" content="但屈指，流年偷换。">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="几时">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-<h1 class="post-title" itemprop="name headline">categories
-
-</h1>
-
-<div class="post-meta">
-  
-  
-
-
-
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <div class="category-all-page">
-            <div class="category-all-title">
+          <h1 class="post-title" itemprop="name headline">Markowitz's Mean-Variance Model Derivation in Python
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-01-17 15:04:00 / 修改时间：15:26:05" itemprop="dateCreated datePublished" datetime="2020-01-17T15:04:00+08:00">2020-01-17</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
               
               
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/项目/" itemprop="url" rel="index"><span itemprop="name">项目</span></a></span>
+
                 
-                  
-                
-              
-                
-                  
                 
               
-                
-                  
-                
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
               
-              目前共计 3 个分类
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">6.4k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">6 分钟</span>
+              
             </div>
-            <div class="category-all">
-              <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/markdown/">markdown</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/爬虫/">爬虫</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/项目/">项目</a><span class="category-list-count">3</span></li></ul>
-            </div>
-          </div>
-        
-      </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <h1 id="Markowitz’s-Mean-Variance-Model-Derivation-in-Python"><a href="#Markowitz’s-Mean-Variance-Model-Derivation-in-Python" class="headerlink" title="Markowitz’s Mean-Variance Model Derivation in Python"></a>Markowitz’s Mean-Variance Model Derivation in Python</h1><p>Interested by “Lecture 3.Quadratic Programing and Portfolio Selection Theory”,I’ve consulted a number of books about Markowitz’s Mean-Variance Model.Therefore,I want to make some discussion about what I’ve learnt and the expeirments when I tried to figure out this model.</p>
+<h2 id="Theory-Summary"><a href="#Theory-Summary" class="headerlink" title="Theory Summary"></a>Theory Summary</h2><p>Markowitz made the following assumptions while developing the Hean-Variance Model: </p>
+<ol>
+<li>Risk of a portfolio is based on the variability of returns from the said portfolio.</li>
+<li>An investor is risk averse.</li>
+<li>An investor prefers to increase consumption.</li>
+<li>The investor’s utility function is concave and increasing, due to his risk aversion and consumption preference.</li>
+<li>Analysis is based on single period model of investment.</li>
+<li>An investor either maximizes his portfolio return for a given level of risk or maximizes his return for the minimum risk.</li>
+<li>An investor is rational in nature.</li>
+</ol>
+<p>To choose the best portfolio from a number of possible portfolios, each with different return and risk, two separate decisions are to be made, detailed in the below sections: </p>
+<ol>
+<li>Determination of a set of efficient portfolios.</li>
+<li>Selection of the best portfolio out of the efficient set.</li>
+</ol>
+<p><em>Above quotes from <a href="https://en.wikipedia.org/wiki/Markowitz_model" target="_blank" rel="noopener">wiki</a></em></p>
+<p>Based on above assumptions and thoughts,Markowitz establish his Mean-Variance Model as follows:</p>
+<p>Formula:</p>
+<p><img src="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/pic/item/5bafa40f4bfbfbed801fba1677f0f736afc31f10.jpg" alt="Formula"></p>
+<p>Constraints:</p>
+<p><img src="https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/pic/item/5366d0160924ab1880c26d5e3afae6cd7a890b86.jpg" alt="Constraints"></p>
+<p>notes:x<sub>i</sub> stands for the weights of asset i,r<sub>i</sub> stands for the return of asset i</p>
+<h2 id="Simulations"><a href="#Simulations" class="headerlink" title="Simulations"></a>Simulations</h2><p>In this part ,I will try to use random data to simulate the derivation process of Mean-Variance Model.Thanks for my boyfriend’s leading,I choose python as the main tool.And each line of code is with notes if necessary.</p>
+<p>First,initiate and import necessary util packages.</p>
+<p>Intro of each util package:</p>
+<ul>
+<li>numpy and pandas:  Matrix calculate</li>
+<li>matplotlib : Data plot</li>
+<li>cvxopt : A convex solver</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> cvxopt <span class="keyword">as</span> opt</span><br><span class="line"><span class="keyword">from</span> cvxopt <span class="keyword">import</span> blas, solvers</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">np.random.seed(<span class="number">123</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Turn off progress printing </span></span><br><span class="line">solvers.options[<span class="string">'show_progress'</span>] = <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+<p>Assume that there are 4 assets, each with a return series of length 1000. The func numpy.random.randn is used to sample returns from a normal distribution.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">## NUMBER OF ASSETS</span></span><br><span class="line">n_assets = <span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## NUMBER OF OBSERVATIONS</span></span><br><span class="line">n_obs = <span class="number">1000</span></span><br><span class="line"></span><br><span class="line">return_vec = np.random.randn(n_assets, n_obs)</span><br></pre></td></tr></table></figure></p>
+<p>Plot the return series of the assumed 4 assets.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">plt.plot(return_vec.T, alpha=<span class="number">.4</span>);</span><br><span class="line">plt.xlabel(<span class="string">'time'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'returns'</span>);</span><br></pre></td></tr></table></figure></p>
+<p><img src="/blog/images/pasted-7.png" alt="upload successful"></p>
+<p>These return series can be used to create a wide range of portfolios. After that random weight vectors and plot those portfolios will be produced. As I want all my capital to be invested, the weights will have to sum to one.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">rand_weights</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="string">''' Produces n random weights that sum to 1 '''</span></span><br><span class="line">    k = np.random.rand(n)</span><br><span class="line">    <span class="keyword">return</span> k / sum(k)</span><br><span class="line"></span><br><span class="line">print(rand_weights(n_assets))</span><br><span class="line">print(rand_weights(n_assets))</span><br></pre></td></tr></table></figure></p>
+<p>Next, evaluate how these random portfolios would perform by calculating the mean returns and the volatility (here using standard deviation). I set a filter so that  only  portfolios with a standard deviation of &lt; 2 are ploted for better illustration.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">random_portfolio</span><span class="params">(returns)</span>:</span></span><br><span class="line">    <span class="string">''' </span></span><br><span class="line"><span class="string">    Returns the mean and standard deviation of returns for a random portfolio</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line"></span><br><span class="line">    p = np.asmatrix(np.mean(returns, axis=<span class="number">1</span>))</span><br><span class="line">    w = np.asmatrix(rand_weights(returns.shape[<span class="number">0</span>]))</span><br><span class="line">    C = np.asmatrix(np.cov(returns))</span><br><span class="line">        </span><br><span class="line">    mu = w * p.T</span><br><span class="line">    sigma = np.sqrt(w * C * w.T)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># This recursion reduces outliers to keep plots pretty</span></span><br><span class="line">    <span class="keyword">if</span> sigma &gt; <span class="number">2</span>:</span><br><span class="line">        <span class="keyword">return</span> random_portfolio(returns)</span><br><span class="line">    <span class="keyword">return</span> mu, sigma</span><br></pre></td></tr></table></figure>
+<p>Calculate the return using</p>
+<p align="center">R=p<sup>T</sup>w</p>
+
+<p>where R is the expected return, p<sup>T</sup> is the transpose of the vector for the mean returns for each time series and w is the weight vector of the portfolio. p is a N*1 column vector, so p<sup>T</sup> turns is a 1*N row vector which can be multiplied with the  weight (column) vector w to give a scalar result.  </p>
+<p>Next, Calculate the standard deviation</p>
+<p align="center">sigma=sqrt(w<sup>T</sup>Cw)</p>
+
+<p>where C is the N*N  covariance matrix of the returns.</p>
+<p>Generate the mean returns and volatility for 500 random portfolios and plot them:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">n_portfolios = <span class="number">500</span></span><br><span class="line">means, stds = np.column_stack([</span><br><span class="line">    random_portfolio(return_vec) </span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> xrange(n_portfolios)</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">plt.plot(stds, means, <span class="string">'o'</span>, markersize=<span class="number">5</span>)</span><br><span class="line">plt.xlabel(<span class="string">'std'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'mean'</span>)</span><br><span class="line">plt.title(<span class="string">'Mean and standard deviation of returns of randomly generated portfolios'</span>);</span><br></pre></td></tr></table></figure></p>
+<p><img src="/blog/images/pasted-6.png" alt="upload successful"></p>
+<p>By observing the picture it can be figured out that they form a characteristic parabolic shape called the “Markowitz Bullet” whose upper boundary is called the “efficient frontier”, where investors can have the lowest variance for a given expected return.</p>
+<p>Now  the efficient frontier in Markowitz-style can be calculated. This is done by minimizing</p>
+<p>w<sup>T</sup>Cw</p>
+<p>for fixed expected portfolio return R<sup>T</sup>w while keeping the sum of all the weights equal to 1:</p>
+<p>sum(w<sub>i</sub>)=1 (i=1,2,3…n)</p>
+<p>Here I parametrically run through R<sup>T</sup>w=miu and find the minimum variance for different miu‘s.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">optimal_portfolio</span><span class="params">(returns)</span>:</span></span><br><span class="line">    n = len(returns)</span><br><span class="line">    returns = np.asmatrix(returns)</span><br><span class="line">    </span><br><span class="line">    N = <span class="number">100</span></span><br><span class="line">    mus = [<span class="number">10</span>**(<span class="number">5.0</span> * t/N - <span class="number">1.0</span>) <span class="keyword">for</span> t <span class="keyword">in</span> range(N)]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Convert to cvxopt matrices</span></span><br><span class="line">    S = opt.matrix(np.cov(returns))</span><br><span class="line">    pbar = opt.matrix(np.mean(returns, axis=<span class="number">1</span>))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Create constraint matrices</span></span><br><span class="line">    G = -opt.matrix(np.eye(n))   <span class="comment"># negative n x n identity matrix</span></span><br><span class="line">    h = opt.matrix(<span class="number">0.0</span>, (n ,<span class="number">1</span>))</span><br><span class="line">    A = opt.matrix(<span class="number">1.0</span>, (<span class="number">1</span>, n))</span><br><span class="line">    b = opt.matrix(<span class="number">1.0</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Calculate efficient frontier weights using quadratic programming</span></span><br><span class="line">    portfolios = [solvers.qp(mu*S, -pbar, G, h, A, b)[<span class="string">'x'</span>] </span><br><span class="line">                  <span class="keyword">for</span> mu <span class="keyword">in</span> mus]</span><br><span class="line">    <span class="comment">## CALCULATE RISKS AND RETURNS FOR FRONTIER</span></span><br><span class="line">    returns = [blas.dot(pbar, x) <span class="keyword">for</span> x <span class="keyword">in</span> portfolios]</span><br><span class="line">    risks = [np.sqrt(blas.dot(x, S*x)) <span class="keyword">for</span> x <span class="keyword">in</span> portfolios]</span><br><span class="line">    <span class="comment">## CALCULATE THE 2ND DEGREE POLYNOMIAL OF THE FRONTIER CURVE</span></span><br><span class="line">    m1 = np.polyfit(returns, risks, <span class="number">2</span>)</span><br><span class="line">    x1 = np.sqrt(m1[<span class="number">2</span>] / m1[<span class="number">0</span>])</span><br><span class="line">    <span class="comment"># CALCULATE THE OPTIMAL PORTFOLIO</span></span><br><span class="line">    wt = solvers.qp(opt.matrix(x1 * S), -pbar, G, h, A, b)[<span class="string">'x'</span>]</span><br><span class="line">    <span class="keyword">return</span> np.asarray(wt), returns, risks</span><br><span class="line"></span><br><span class="line">weights, returns, risks = optimal_portfolio(return_vec)</span><br><span class="line"></span><br><span class="line">plt.plot(stds, means, <span class="string">'o'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'mean'</span>)</span><br><span class="line">plt.xlabel(<span class="string">'std'</span>)</span><br><span class="line">plt.plot(risks, returns, <span class="string">'y-o'</span>)</span><br><span class="line">print(weights)</span><br></pre></td></tr></table></figure>
+<p><img src="efficient_frontier.png" alt="efficient_frontier"></p>
+<p>In yellow is the optimal portfolios for each of the desired returns (i.e. the mus). In addition, the weights for one optimal portfolio are also calculated.</p>
+
       
     </div>
-    
-
-
 
     
+
     
     
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2019/09/13/码农正确装逼姿势——书法篇/" rel="next" title="码农正确装逼姿势——书法篇">
+                <i class="fa fa-chevron-left"></i> 码农正确装逼姿势——书法篇
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
   </div>
 
 
@@ -503,8 +677,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -618,6 +801,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Markowitz’s-Mean-Variance-Model-Derivation-in-Python"><span class="nav-number">1.</span> <span class="nav-text">Markowitz’s Mean-Variance Model Derivation in Python</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Theory-Summary"><span class="nav-number">1.1.</span> <span class="nav-text">Theory Summary</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Simulations"><span class="nav-number">1.2.</span> <span class="nav-text">Simulations</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
