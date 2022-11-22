@@ -80,7 +80,7 @@ theme: next
 deploy:
   type: git
   repo: git@github.com:Hiram711/blog.git
-  branch: hexo 
+  branch: gh-pages 
 
 #Search
 search:
