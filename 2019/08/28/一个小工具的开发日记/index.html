@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" href="/blog/lib/fancybox/source/jquery.fancybox.css">
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/blog/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Pisces',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言 7月4日新开这本日记，也为了督促自己下个学期多下些苦功。先要读完手边的莎士比亚的《亨利八世》。7月13日打牌。7月14日打牌。7月15日打牌。7月16日胡适之啊胡适之！你怎么能如此堕落！先前订下的学习计划你都忘了吗？子曰：“吾日三省吾身。”不能再这样下去了！7月17日打牌。7月18日打牌。  以上摘自胡适先生的留学日记，明明是别人的故事，主人公却好像是自己。 于是抽空就有了此文，虽然还是咸鱼">
+<meta name="keywords" content="项目,小工具">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一个小工具的开发日记">
+<meta property="og:url" content="https://hiram711.github.io/2019/08/28/一个小工具的开发日记/index.html">
+<meta property="og:site_name" content="几时">
+<meta property="og:description" content="前言 7月4日新开这本日记，也为了督促自己下个学期多下些苦功。先要读完手边的莎士比亚的《亨利八世》。7月13日打牌。7月14日打牌。7月15日打牌。7月16日胡适之啊胡适之！你怎么能如此堕落！先前订下的学习计划你都忘了吗？子曰：“吾日三省吾身。”不能再这样下去了！7月17日打牌。7月18日打牌。  以上摘自胡适先生的留学日记，明明是别人的故事，主人公却好像是自己。 于是抽空就有了此文，虽然还是咸鱼">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://hiram711.github.io/blog/images/pasted-1.png">
+<meta property="og:image" content="https://hiram711.github.io/blog/images/pasted-2.png">
+<meta property="og:updated_time" content="2022-11-23T08:21:49.607Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一个小工具的开发日记">
+<meta name="twitter:description" content="前言 7月4日新开这本日记，也为了督促自己下个学期多下些苦功。先要读完手边的莎士比亚的《亨利八世》。7月13日打牌。7月14日打牌。7月15日打牌。7月16日胡适之啊胡适之！你怎么能如此堕落！先前订下的学习计划你都忘了吗？子曰：“吾日三省吾身。”不能再这样下去了！7月17日打牌。7月18日打牌。  以上摘自胡适先生的留学日记，明明是别人的故事，主人公却好像是自己。 于是抽空就有了此文，虽然还是咸鱼">
+<meta name="twitter:image" content="https://hiram711.github.io/blog/images/pasted-1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://hiram711.github.io/2019/08/28/一个小工具的开发日记/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>一个小工具的开发日记 | 几时</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">几时</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/blog/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/blog/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/blog/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">7</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/blog/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">4</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/blog/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">7</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-commonweal">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/blog/404/" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>公益 404</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hiram711.github.io/blog/2019/08/28/一个小工具的开发日记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="几时西风">
+      <meta itemprop="description" content="但屈指，流年偷换。">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="几时">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">一个小工具的开发日记
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-28 12:27:00" itemprop="dateCreated datePublished" datetime="2019-08-28T12:27:00+08:00">2019-08-28</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2022-11-23 16:21:49" itemprop="dateModified" datetime="2022-11-23T16:21:49+08:00">2022-11-23</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/项目/" itemprop="url" rel="index"><span itemprop="name">项目</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">4.4k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">4 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
+<p>7月4日<br>新开这本日记，也为了督促自己下个学期多下些苦功。先要读完手边的莎士比亚的《亨利八世》。<br>7月13日<br>打牌。<br>7月14日<br>打牌。<br>7月15日<br>打牌。<br>7月16日<br>胡适之啊胡适之！你怎么能如此堕落！先前订下的学习计划你都忘了吗？子曰：“吾日三省吾身。”不能再这样下去了！<br>7月17日<br>打牌。<br>7月18日<br>打牌。</p>
+</blockquote>
+<p><em>以上摘自胡适先生的留学日记</em>，明明是别人的故事，主人公却好像是自己。</p>
+<p>于是抽空就有了此文，虽然还是咸鱼，但至少死鱼眼里泛出些许光彩了。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p><strong>闲话不提，直接进入正文。</strong>故事的起因就是最近常跑人资办公室的我被人事姐姐们拜托帮忙做一个小工具，希望能够在培训会上用来随机抽问题然后找人回答，然后希望这个小工具能够尽快做好给她们。</p>
+<p>我寻思这不挺简单么，也就顺口答应了下来。事后证明……</p>
+<p>真的很简单，不然本咸鱼为什么用这个故事来水文呢！？</p>
+<p>事情虽然简单，该走的流程还是要走的，我们按照软件开发流程一步步来。</p>
+<h2 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h2><p>一番沟通，确认了人事姐姐们的主要需求如下：</p>
+<ul>
+<li>随机抽号：可以设置<strong>抽取数字范围</strong>和<strong>抽取数字个数</strong>，点<strong>开始按钮</strong>数字开始滚动，点<strong>结束按钮</strong>出现抽号结果</li>
+<li>背景与标题设置：可以设置抽号程序的<strong>背景界面</strong>与<strong>大标题</strong>，让抽号程序显示内容和会议更加贴合</li>
+</ul>
+<h2 id="设计"><a href="#设计" class="headerlink" title="设计"></a>设计</h2><p>考虑开发速度和复杂度，这个小工具简单地用python开发就完事了，毕竟<strong>人生苦短，我用python</strong>。</p>
+<h3 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h3><ul>
+<li>开发语言：python</li>
+<li>程序架构：cs架构（一个自带GUI的小工具而已，没必要搞bs架构）</li>
+<li>主要python工具包：tkinter(标准库)，Pillow(图像处理库)</li>
+</ul>
+<h3 id="界面设计"><a href="#界面设计" class="headerlink" title="界面设计"></a>界面设计</h3><p><strong>灵魂画师上线！</strong></p>
+<p><img src="/blog/images/pasted-1.png" alt="设计稿1"></p>
+<p><img src="/blog/images/pasted-2.png" alt="设计稿2"></p>
+<h2 id="开发"><a href="#开发" class="headerlink" title="开发"></a>开发</h2><p>又到了我们最爱的coding环节，请各位打开浏览器，面向搜索引擎（最好是Google）开始编写代码。</p>
+<p>具体的我们就不讲了，<a href="https://github.com/Hiram711/lottery" target="_blank" rel="noopener">源码</a>都在这，tkinter不会用请看<a href="https://docs.python.org/3/library/tkinter.html" target="_blank" rel="noopener">官方文档</a>，就主要说一下一些有趣的细节。</p>
+<h3 id="如何设置一个弹出窗口用于接收参数设置："><a href="#如何设置一个弹出窗口用于接收参数设置：" class="headerlink" title="如何设置一个弹出窗口用于接收参数设置："></a>如何设置一个弹出窗口用于接收参数设置：</h3><p>其实就是编写一个主窗口类（继承tk.TK类），一个弹出窗口类（继承tk.Toplevel类）。<br>大致的流程是这样的：</p>
+<ol>
+<li>创建主窗口实例；</li>
+<li>触发绑定在主窗口实例上的触发式组件；</li>
+<li>创建弹出窗口实例；</li>
+<li>通过弹出窗口会话收集数据；</li>
+<li>主窗口实例等待弹出窗口会话销毁；</li>
+<li>主窗口实例获取弹出窗口实例收集到的数据。</li>
+</ol>
+<p>sample:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 主窗</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainWindow</span><span class="params">(tk.Tk)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super().__init__()</span><br><span class="line">        self.title(<span class="string">'主窗口'</span>)</span><br><span class="line">        <span class="comment"># 程序参数/数据</span></span><br><span class="line">        self.name = tk.StringVar()</span><br><span class="line">        self.name.set(<span class="string">'张三'</span>)</span><br><span class="line">        self.age = tk.IntVar()</span><br><span class="line">        self.age.set(<span class="number">30</span>)</span><br><span class="line">        <span class="comment"># 设置主窗口界面</span></span><br><span class="line">        self.setupUI()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setupUI</span><span class="params">(self)</span>:</span></span><br><span class="line">        row1 = tk.Frame(self)</span><br><span class="line">        row1.pack(fill=<span class="string">"x"</span>)</span><br><span class="line">        tk.Label(row1, text=<span class="string">'姓名：'</span>, width=<span class="number">8</span>).pack(side=tk.LEFT)</span><br><span class="line">        self.l1 = tk.Label(row1, textvariable=self.name, width=<span class="number">20</span>)</span><br><span class="line">        self.l1.pack(side=tk.LEFT)</span><br><span class="line">        row2 = tk.Frame(self)</span><br><span class="line">        row2.pack(fill=<span class="string">"x"</span>)</span><br><span class="line">        tk.Label(row2, text=<span class="string">'年龄：'</span>, width=<span class="number">8</span>).pack(side=tk.LEFT)</span><br><span class="line">        self.l2 = tk.Label(row2, textvariable=self.age, width=<span class="number">20</span>)</span><br><span class="line">        self.l2.pack(side=tk.LEFT)</span><br><span class="line">        row3 = tk.Frame(self)</span><br><span class="line">        row3.pack(fill=<span class="string">"x"</span>)</span><br><span class="line">        tk.Button(row3, text=<span class="string">"设置"</span>, command=self.setup_config).pack(side=tk.RIGHT)  <span class="comment"># 通过Button触发</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 设置参数</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setup_config</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># 接收弹窗的数据</span></span><br><span class="line">        res = self.ask_userinfo()</span><br><span class="line">        <span class="keyword">if</span> res <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="comment"># 更改参数，更新界面</span></span><br><span class="line">        self.name.set(res[<span class="number">0</span>])</span><br><span class="line">        self.age.set(res[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 弹窗</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">ask_userinfo</span><span class="params">(self)</span>:</span></span><br><span class="line">        popup_window = PopupWindow()  <span class="comment"># 创建弹窗实例</span></span><br><span class="line">        self.wait_window(popup_window)  <span class="comment"># 等待弹窗会话关闭</span></span><br><span class="line">        <span class="keyword">return</span> popup_window.userinfo  <span class="comment"># 获取绑定在弹窗实例私有变量上的数据</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 弹窗</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PopupWindow</span><span class="params">(tk.Toplevel)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super().__init__()</span><br><span class="line">        self.title(<span class="string">'弹出窗口'</span>)</span><br><span class="line">        <span class="comment"># 设置弹窗界面</span></span><br><span class="line">        self.setup_UI()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setup_UI</span><span class="params">(self)</span>:</span></span><br><span class="line">        row1 = tk.Frame(self)</span><br><span class="line">        row1.pack(fill=<span class="string">"x"</span>)</span><br><span class="line">        tk.Label(row1, text=<span class="string">'姓名：'</span>, width=<span class="number">8</span>).pack(side=tk.LEFT)</span><br><span class="line">        self.name = tk.StringVar()</span><br><span class="line">        tk.Entry(row1, textvariable=self.name, width=<span class="number">20</span>).pack(side=tk.LEFT)</span><br><span class="line">        row2 = tk.Frame(self)</span><br><span class="line">        row2.pack(fill=<span class="string">"x"</span>, ipadx=<span class="number">1</span>, ipady=<span class="number">1</span>)</span><br><span class="line">        tk.Label(row2, text=<span class="string">'年龄：'</span>, width=<span class="number">8</span>).pack(side=tk.LEFT)</span><br><span class="line">        self.age = tk.IntVar()</span><br><span class="line">        tk.Entry(row2, textvariable=self.age, width=<span class="number">20</span>).pack(side=tk.LEFT)</span><br><span class="line">        row3 = tk.Frame(self)</span><br><span class="line">        row3.pack(fill=<span class="string">"x"</span>)</span><br><span class="line">        tk.Button(row3, text=<span class="string">"确定"</span>, command=self.save).pack(side=tk.LEFT)</span><br><span class="line">        tk.Button(row3, text=<span class="string">"取消"</span>, command=self.cancel).pack(side=tk.LEFT)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">save</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.userinfo = [self.name.get(), self.age.get()]  <span class="comment"># 将用户输入的数据绑定到实例私有变量上</span></span><br><span class="line">        self.destroy()  <span class="comment"># 销毁窗口</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cancel</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.userinfo = <span class="literal">None</span></span><br><span class="line">        self.destroy()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    app = MainWindow()</span><br><span class="line">    app.mainloop()</span><br></pre></td></tr></table></figure></p>
+<h3 id="如何设置程序背景图片"><a href="#如何设置程序背景图片" class="headerlink" title="如何设置程序背景图片"></a>如何设置程序背景图片</h3><p>tkinter在界面美化这方面其实并不是很好用，在设置程序图片这一块遇上了不少坑，权且记录一下：</p>
+<ol>
+<li>无法直接对tk.TK或者tk.Frame这类容器设置背景图片，最多设置背景色（至少我没找到什么好办法），解决方法就是搞一个tk.Label平铺在整个tk.TK上，然后通过tk.Label的image属性设置背景图片；</li>
+<li>在按照上述方法设置背景图片的过程中发现图片并未平铺到整个tk.Label,需要手动设置图片大小；且需要预先使用PIL对图片进行处理，否则某些图片格式tkinter不支持；</li>
+</ol>
+<p>sample:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> ImageTk,Image</span><br><span class="line"></span><br><span class="line">root=tk.Tk(bg=<span class="string">'blue'</span>) <span class="comment"># 设置一个背景色方便看出问题</span></span><br><span class="line">width,height=root.maxsize() <span class="comment"># 获取屏幕大小</span></span><br><span class="line">root.geometry(<span class="string">'&#123;&#125;x&#123;&#125;'</span>.format(width,height)) <span class="comment"># 最大化程序窗口</span></span><br><span class="line">image=Image.open(<span class="string">'1.jpg'</span>)</span><br><span class="line">image=image.resize((width,height),Image.ANTIALIAS) <span class="comment"># 不手动调整图片尺寸的话会发现图片不会平铺到整个tk.Label上</span></span><br><span class="line">bg_image=ImageTk.PhotoImage(image) <span class="comment"># 利用PIL形成转换管道的方式才能正确读取jpg图片</span></span><br><span class="line">l=tk.Label(root,bg=<span class="string">'white'</span>,image=bg_image) </span><br><span class="line">l.pack(expand=<span class="literal">True</span>,fill=tk.BOTH) <span class="comment"># 确认label已经平铺到整个程序窗口</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="测试与发布"><a href="#测试与发布" class="headerlink" title="测试与发布"></a>测试与发布</h2><ul>
+<li>测试：xjbd一遍，OK了；</li>
+<li>发布：利用pyinstaller将程序打包成exe即可。</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>我对自己说：“张杰啊张杰！你怎么能如此堕落！先前立的flag你都忘了吗？子曰：‘吾日三省吾身。’不能再这样下去了！”</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/项目/" rel="tag"># 项目</a>
+          
+            <a href="/blog/tags/小工具/" rel="tag"># 小工具</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2019/07/05/Python-and-Selenium/" rel="next" title="Python and Selenium">
+                <i class="fa fa-chevron-left"></i> Python and Selenium
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2019/09/13/码农正确装逼姿势——书法篇/" rel="prev" title="码农正确装逼姿势——书法篇">
+                码农正确装逼姿势——书法篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">几时西风</p>
+              <div class="site-description motion-element" itemprop="description">但屈指，流年偷换。</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/blog/archives/">
+                
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/blog/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/blog/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hiram711" title="GitHub &rarr; https://github.com/Hiram711" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="mailto:371721772@qq.com" title="E-Mail &rarr; mailto:371721772@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i></a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#正文"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#需求分析"><span class="nav-number">2.1.</span> <span class="nav-text">需求分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设计"><span class="nav-number">2.2.</span> <span class="nav-text">设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#技术选型"><span class="nav-number">2.2.1.</span> <span class="nav-text">技术选型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#界面设计"><span class="nav-number">2.2.2.</span> <span class="nav-text">界面设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开发"><span class="nav-number">2.3.</span> <span class="nav-text">开发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何设置一个弹出窗口用于接收参数设置："><span class="nav-number">2.3.1.</span> <span class="nav-text">如何设置一个弹出窗口用于接收参数设置：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何设置程序背景图片"><span class="nav-number">2.3.2.</span> <span class="nav-text">如何设置程序背景图片</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试与发布"><span class="nav-number">2.4.</span> <span class="nav-text">测试与发布</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">几时西风</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/blog/lib/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script src="/blog/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/blog/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/blog/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/blog/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+  
+  <script src="/blog/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/blog/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/blog/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/blog/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'manual') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+        if (result) $(this).text('复制成功');
+        else $(this).text('复制失败');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  
+
+</body>
+</html>
