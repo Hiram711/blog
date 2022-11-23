@@ -121,19 +121,19 @@ yum install -y xorg-x11-xauth \
 
 ## 禁用yum自动更新（根据实际需要选择）
 
-#### 停止yum自动更新服务
+### 停止yum自动更新服务
 
 ```
 systemctl stop yum-cron
 ```
 
-#### 禁用yum自动更新服务
+### 禁用yum自动更新服务
 
 ```
 systemctl disable yum-cron
 ```
 
-#### 查看yum自动更新服务状态
+### 查看yum自动更新服务状态
 
 ```
 systemctl status yum-cron
@@ -156,13 +156,15 @@ echo "LANG=\"zh_CN.UTF-8\"" > /etc/locale.conf
 cat /etc/locale.conf
 ```
 
-## 安装NTP服务
+## NTP服务
+
+### 安装NTP服务
 
 ```
 yum install ntpdate -y
 ```
 
-## 设置时间同步上游服务器
+### 设置时间同步上游服务器
 
 > 编辑
 
@@ -183,13 +185,13 @@ asia.pool.ntp.org
 ntp.aliyun.com
 ```
 
-## 启用ntpdate服务
+### 启用ntpdate服务
 
 ```
 systemctl enable ntpdate
 ```
 
-## 启动ntpdate服务
+### 启动ntpdate服务
 
 ```
 systemctl restart ntpdate
@@ -201,11 +203,12 @@ systemctl restart ntpdate
 systemctl restart nscd
 ```
 
-## 查看ntpdate服务状态
+### 查看ntpdate服务状态
 
 ```
 systemctl status ntpdate
 ```
+## 防火墙
 
 ### 停止防火墙
 
@@ -225,7 +228,7 @@ systemctl disable firewalld
 systemctl status firewalld
 ```
 
-### 关闭SELinux
+## 关闭SELinux
 
 ```
 setenforce 0
@@ -237,7 +240,7 @@ getenforce
 /usr/sbin/sestatus -v
 ```
 
-### 内核参数设置
+## 内核参数设置
 
 > 编辑
 
@@ -360,7 +363,7 @@ net.netfilter.nf_conntrack_tcp_timeout_established = 1200
 sysctl -p
 ```
 
-### 设置文件描述符
+## 设置文件描述符
 
 > 编辑
 
@@ -411,7 +414,7 @@ session    required     /lib/security/pam_limits.so
 session    required     /lib64/security/pam_limits.so
 ```
 
-### 关闭虚拟内存
+## 关闭虚拟内存
 
 ```
 swapoff -a
@@ -419,7 +422,7 @@ sed -i 's/.*swap.*/#&/' /etc/fstab
 cat /etc/fstab
 ```
 
-### 配置虚拟内存设置【可选】
+## 配置虚拟内存设置【可选】
 
 > 物理内存小于4G（虚拟内存统一设置为4G）
 
@@ -468,16 +471,16 @@ vim /etc/fstab
 /swap swap swap defaults 0 0
 ```
 
-### 关闭transparent_hugepage
+## 关闭transparent_hugepage
 
-##### 临时关闭
+### 临时关闭
 
 ```
 echo "never" > /sys/kernel/mm/transparent_hugepage/enabled
 echo "never" >  /sys/kernel/mm/transparent_hugepage/defrag
 ```
 
-##### 永久关闭
+### 永久关闭
 
 > 编辑
 
@@ -507,14 +510,14 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg
 ```
 
-### 添加执行路径环境变量配置
+## 添加执行路径环境变量配置
 
 ```
 echo 'export PATH=.:$PATH' > /etc/profile.d/here.sh
 cat /etc/profile.d/here.sh
 ```
 
-### 密码策略配置
+## 密码策略配置
 
 > 编辑
 
@@ -587,7 +590,7 @@ password    sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_au
 password    sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok remember=5
 ```
 
-### SSH限制策略
+## SSH限制策略
 
 > 编辑
 
@@ -605,7 +608,7 @@ ClientAliveInterval 600
 ClientAliveCountMax 2
 ```
 
-### 创建物理卷
+## 创建物理卷
 
 ```
 pvcreate /dev/sdb
@@ -674,6 +677,8 @@ shutdown -r now
 ```
 su - root
 ```
+
+## 开始安装Docker
 
 ### 安装Docker
 
