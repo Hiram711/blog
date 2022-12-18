@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" href="/blog/lib/fancybox/source/jquery.fancybox.css">
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/blog/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Pisces',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Docker Swarm的介绍与使用What Docker(容器) Swarm(集群)——简单来说，Docker swarm就是容器集群（包含了集群管理和编排功能），由Docker公司研发并且在Dokcer v1.12版本后自带此服务（早期作为一项独立服务叫做swarmkit，需要单独安装）。  集群管理：创建新集群、升级集群的主节点和工作节点、执行节点维护(例如内核升级)和升级运行集群的版本等。">
+<meta name="keywords" content="docker,云原生">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker Swarm的介绍与使用">
+<meta property="og:url" content="https://hiram711.github.io/2022/12/18/Docker-Swarm的介绍与使用/index.html">
+<meta property="og:site_name" content="几时">
+<meta property="og:description" content="Docker Swarm的介绍与使用What Docker(容器) Swarm(集群)——简单来说，Docker swarm就是容器集群（包含了集群管理和编排功能），由Docker公司研发并且在Dokcer v1.12版本后自带此服务（早期作为一项独立服务叫做swarmkit，需要单独安装）。  集群管理：创建新集群、升级集群的主节点和工作节点、执行节点维护(例如内核升级)和升级运行集群的版本等。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://hiram711.github.io/blog/images/pasted-11.png">
+<meta property="og:updated_time" content="2022-12-18T09:32:38.471Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker Swarm的介绍与使用">
+<meta name="twitter:description" content="Docker Swarm的介绍与使用What Docker(容器) Swarm(集群)——简单来说，Docker swarm就是容器集群（包含了集群管理和编排功能），由Docker公司研发并且在Dokcer v1.12版本后自带此服务（早期作为一项独立服务叫做swarmkit，需要单独安装）。  集群管理：创建新集群、升级集群的主节点和工作节点、执行节点维护(例如内核升级)和升级运行集群的版本等。">
+<meta name="twitter:image" content="https://hiram711.github.io/blog/images/pasted-11.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://hiram711.github.io/2022/12/18/Docker-Swarm的介绍与使用/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Docker Swarm的介绍与使用 | 几时</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">几时</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/blog/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/blog/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/blog/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">9</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/blog/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">4</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/blog/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">9</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-commonweal">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/blog/404/" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>公益 404</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hiram711.github.io/blog/2022/12/18/Docker-Swarm的介绍与使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="几时西风">
+      <meta itemprop="description" content="但屈指，流年偷换。">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="几时">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Docker Swarm的介绍与使用
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2022-12-18 17:29:00 / 修改时间：17:32:38" itemprop="dateCreated datePublished" datetime="2022-12-18T17:29:00+08:00">2022-12-18</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/docker/" itemprop="url" rel="index"><span itemprop="name">docker</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">14k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">13 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Docker-Swarm的介绍与使用"><a href="#Docker-Swarm的介绍与使用" class="headerlink" title="Docker Swarm的介绍与使用"></a>Docker Swarm的介绍与使用</h1><h2 id="What"><a href="#What" class="headerlink" title="What"></a>What</h2><ul>
+<li><p>Docker(容器) Swarm(集群)——简单来说，Docker swarm就是容器集群（包含了集群管理和编排功能），由Docker公司研发并且在Dokcer v1.12版本后自带此服务（早期作为一项独立服务叫做swarmkit，需要单独安装）。</p>
+</li>
+<li><p>集群管理：创建新集群、升级集群的主节点和工作节点、执行节点维护(例如内核升级)和升级运行集群的版本等。</p>
+</li>
+<li><p>容器编排：应用一般由单独容器化的组件（通常称为微服务）组成，这些组件必须按特定顺序在网络中进行组织并照计划运行，这种对多个容器进行组织的流程即称为容器编排（使用Docker Compose实际就是容器编排）。</p>
+<p>For Example:</p>
+<p>standalone-mysql-5.7.yaml</p>
+</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">"2"</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  nacos:</span> <span class="comment"># 服务名称</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">nacos/nacos-server:latest</span> <span class="comment"># 使用的镜像</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">nacos-standalone-mysql</span> <span class="comment"># 容器名称</span></span><br><span class="line"><span class="attr">    env_file:</span> <span class="comment"># 环境变量文件加载</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">../env/nacos-standlone-mysql.env</span></span><br><span class="line"><span class="attr">    volumes:</span> <span class="comment"># 宿主与容器文件挂载</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">./standalone-logs/:/home/nacos/logs</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">./init.d/custom.properties:/home/nacos/init.d/custom.properties</span></span><br><span class="line"><span class="attr">    ports:</span> <span class="comment"># 宿主与容器间端口映射</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">"8848:8848"</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">"9555:9555"</span></span><br><span class="line"><span class="attr">    depends_on:</span> <span class="comment"># 依赖的服务</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">mysql</span></span><br><span class="line"><span class="attr">    restart:</span> <span class="string">on-failure</span> <span class="comment"># 重启策略</span></span><br><span class="line"><span class="attr">  mysql:</span> <span class="comment"># 数据库基础服务</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">mysql</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">nacos/nacos-mysql:5.7</span></span><br><span class="line"><span class="attr">    env_file:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">../env/mysql.env</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">./mysql:/var/lib/mysql</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">"3306:3306"</span></span><br><span class="line"><span class="attr">  prometheus:</span> <span class="comment"># prometheus 用于监控nacos服务，为grafana提供基础数据</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">prometheus</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">prom/prometheus:latest</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">./prometheus/prometheus-standalone.yaml:/etc/prometheus/prometheus.yml</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">"9090:9090"</span></span><br><span class="line"><span class="attr">    depends_on:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">nacos</span></span><br><span class="line"><span class="attr">    restart:</span> <span class="string">on-failure</span></span><br><span class="line"><span class="attr">  grafana:</span> <span class="comment"># 监控面板，配合prometheus使用</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">grafana</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">grafana/grafana:latest</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">3000</span><span class="string">:3000</span></span><br><span class="line"><span class="attr">    restart:</span> <span class="string">on-failure</span></span><br></pre></td></tr></table></figure>
+<h2 id="Key-Concepts"><a href="#Key-Concepts" class="headerlink" title="Key Concepts"></a>Key Concepts</h2><ul>
+<li>架构</li>
+</ul>
+<p><img src="\blog\images\pasted-11.png" alt="架构图"></p>
+<p>从架构图可以看出 Docker Client使用Swarm对 集群(Cluster)进行调度使用。</p>
+<p>上图可以看出，Swarm是典型的master-slave结构，通过发现服务来选举manager。manager是中心管理节点，各个node上运行agent接受manager的统一管理，集群会自动通过Raft协议分布式选举出manager节点，无需额外的发现服务支持，避免了单点的瓶颈问题，同时也内置了DNS的负载均衡和对外部负载均衡机制的集成支持。</p>
+<ul>
+<li><p>node（节点）: 一个节点是docker引擎集群的一个实例，也可以将其视为一个Docker节点。可以在单个物理计算机或云服务器上运行一个或多个节点，但在部署生产集群时通常将节点分布部署在多个物理和云计算机上。<br>要将应用程序部署到swarm，需要将服务定义信息提交给 <strong>manager node(管理节点)</strong>。管理节点将称为<strong>tasks(任务)的工作单元</strong>分派给 <strong>worker nodes(工作节点)</strong>。<br>管理节点还执行编排和集群管理功能，从而使群集处于需要的状态。管理节点会<strong>选举</strong>一个领导者来执行编排任务。<br>工作节点接收并执行从管理器节点分派的任务。默认情况下，管理器节点<strong>也可以作为工作节点运行</strong>，但可以将它们配置为<strong>仅运行管理任务并且仅是管理节点</strong>。代理程序在每个工作节点上运行着一个代理程序，这个代理程序会报告分配给这个工作节点的任务的详细信息。工作节点会通知管理节点分配给它的任务的当前状态，以便管理节点可以维护每个工作节点的状态。</p>
+</li>
+<li><p>service(服务)：服务是要执行在节点上的一组task（任务）的定义，它是集群系统的核心结构，同时也是用户与swarm系统进行交互的核心内容。Service有两种运行模式，一种是replicated，swarm会将服务所需的任务按照你定义的数量复制部署在多个节点上；另一种是global，在所有符合运行条件的Node上，都运行一个服务所需的任务。</p>
+</li>
+<li><p>task(任务):一个任务是一个docker容器和容器内运行命令的集合。它是swarm任务调度的原子单位，管理节点会根据服务内对任务的定义将任务分派到工作节点，一旦一个任务分配到了一个节点，这个任务就不能再移动都其它节点，他只能再一开始分派到的节点上运行或者直到失败。</p>
+</li>
+<li><p>负载均衡：swarm使用了<strong>入口负载均衡器</strong>来把服务开放给swarm外部，swarm可以自动给服务分配外部端口也可以由用户自定义外部端口，如果用户不定义外部端口的话，swarm会在30000~3276这个范围内随机给服务分配一个端口。外部组件比如云负载均衡器或者nginx之类的组件，可以<strong>从集群内的任意一个节点（无论该节点是否在运行要访问服务的任务）来访问服务</strong>。所有集群内节点都可以路由入口连接到一个运行着任务的实例。另外swarm模式还有一个内部DNS组件来给服务自动分派一个DNS入口。swarm manager使用一个<strong>内部负载均衡器</strong>根据每个服务的DNS地址来分配集群内服务的请求。</p>
+</li>
+</ul>
+<h2 id="Why"><a href="#Why" class="headerlink" title="Why"></a>Why</h2><p>为什么使用docker swarm，其实也就是一些功能特点，满足了需求就用：</p>
+<ol>
+<li><p><strong>与Docker Engine集成的集群管理</strong>:使用Docker Engine CLI创建一组Docker引擎，您可以在其中部署应用程序服务。您不需要其他编排软件来创建或管理群集。</p>
+</li>
+<li><p><strong>节点分散式设计：</strong>Docker Engine不是在部署时处理节点角色之间的差异，而是在运行时处理角色变化。您可以使用Docker Engine部署两种类型的节点，管理节点和工作节点。这意味着您可以很方便地从单个镜像开始构建整个群集。</p>
+</li>
+<li><p><strong>声明式服务模型：</strong>Docker Engine使用声明式方法来定义应用程序堆栈中各种服务的所需状态。例如，您可以描述由具有消息队列服务和数据库后端的Web前端服务组成的应用程序。</p>
+</li>
+<li><p><strong>可扩容与缩放容器：</strong>对于每个服务，您可以声明要运行的任务数。当您扩容或缩放时，swarm管理器通过添加或删除任务来自动适应，以保持所需的任务数量来保证集群的可靠状态。</p>
+</li>
+<li><p><strong>容器容错状态协调：</strong>集群管理节点不断监视群集状态，并协调期望状态与实际状态之间的任何差异。例如，如果设置了一个运行10个副本容器的服务，然后托管其中两个副本容器的工作节点崩溃了，那么管理器将创建两个新副本容器以替换崩溃的副本容器。 swarm管理器将新副本容器分配给正在运行和可用的工作节点上。</p>
+</li>
+<li><p><strong>多主机网络：</strong>您可以为服务指定承载网络。当swarm管理器初始化或更新应用程序时，它会自动为承载网络上的容器分配地址。</p>
+</li>
+<li><p><strong>服务发现：</strong>Swarm管理节点为swarm中的每个服务分配唯一的DNS名称，并对运行的容器进行负载均衡。您可以通过嵌入在swarm中的DNS服务器查询在集群中运行的每个容器。</p>
+</li>
+<li><p><strong>负载均衡：</strong>您可以将服务的端口公开给外部负载平衡器。在内部，swarm允许您指定如何在节点之间分发服务容器。</p>
+</li>
+<li><p><strong>缺省安全：</strong>集群中的每个节点强制执行TLS验证和加密，以保护其自身与所有其他节点之间的通信。可以选择使用自签名根证书或来自自定义根CA的证书。</p>
+</li>
+<li><p><strong>滚动更新：</strong>在已经运行期间，您可以增量地应用服务更新到节点。 swarm管理器允许您控制将服务部署到不同节点集之间的延迟。如果出现任何问题，您可以将任务回滚到服务的先前版本。</p>
+</li>
+</ol>
+<h2 id="How"><a href="#How" class="headerlink" title="How"></a>How</h2><ol start="0">
+<li><p><strong>Set up(一些准备)：</strong></p>
+<ul>
+<li>三台linux机器，之间网络互通并且都安装了docker(最好同一版本，安装方法可以参照以前的文章)</li>
+<li>三台机器中选一台作为manager节点，记住该机器的ip,确保其它节点可以通过该ip访问到manager节点</li>
+<li>开放三台机器的对应端口：2377(TCP，用于集群管理通讯),7946(TCP and UDP，用于节点间通讯),4789(UDP,用于服务负载网络)</li>
+</ul>
+</li>
+<li><p><strong>Create a swarm(创建集群)：</strong></p>
+<ul>
+<li><p>ssh连接到选定的管理节点上</p>
+</li>
+<li><p>在管理节点上运行如下命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker swarm init --advertise-addr &lt;MANAGER-IP&gt;</span><br></pre></td></tr></table></figure>
+<p>注意运行命令后的输出，其中docker swarm join命令就是用来将其它工作节点加入集群的命令,最后的docker swarm join-token manager是用于向集群内新增manager节点的，因此要记住token：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ docker swarm init --advertise-addr 192.168.99.100</span><br><span class="line">Swarm initialized: current node (dxn1zf6l61qsb1josjja83ngz) is now a manager.</span><br><span class="line"></span><br><span class="line">To add a worker to this swarm, run the following command:</span><br><span class="line"></span><br><span class="line">    docker swarm join \</span><br><span class="line">    --token SWMTKN-1-49nj1cmql0jkz5s954yi3oex3nedyz0fb0xx14ie39trti4wxv-8vxv8rssmk743ojnwacrr2e7c \</span><br><span class="line">    192.168.99.100:2377</span><br><span class="line"></span><br><span class="line">To add a manager to this swarm, run &apos;docker swarm join-token manager&apos; and follow the instructions.</span><br></pre></td></tr></table></figure>
+<p><strong>如果不小心忘记了token，可以在管理节点上运行docker swarm join-token worker来查看自动生成的加入工作节点命令</strong></p>
+</li>
+<li><p>在管理节点上运行docker info命令可以看到如下输出显示当前集群的状态：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ docker info</span><br><span class="line"></span><br><span class="line">Containers: 2</span><br><span class="line">Running: 0</span><br><span class="line">Paused: 0</span><br><span class="line">Stopped: 2</span><br><span class="line">  ...snip...</span><br><span class="line">Swarm: active</span><br><span class="line">  NodeID: dxn1zf6l61qsb1josjja83ngz</span><br><span class="line">  Is Manager: <span class="literal">true</span></span><br><span class="line">  Managers: 1</span><br><span class="line">  Nodes: 1</span><br><span class="line">  ...snip...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在管理节点上运行docker node ls命令可以看到如下输出显示当前集群节点信息，其中带*的这行表示你目前连接到了这个节点上：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker node ls</span><br><span class="line"></span><br><span class="line">ID                           HOSTNAME  STATUS  AVAILABILITY  MANAGER STATUS</span><br><span class="line">dxn1zf6l61qsb1josjja83ngz *  manager1  Ready   Active        Leader</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>向集群中加入节点：</strong></p>
+<ul>
+<li><p>ssh连接到剩余的两台作为工作节点的机器上</p>
+</li>
+<li><p>运行之前记录下来的加入工作节点的命令，具体如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker swarm join \</span><br><span class="line">  --token  SWMTKN-1-49nj1cmql0jkz5s954yi3oex3nedyz0fb0xx14ie39trti4wxv-8vxv8rssmk743ojnwacrr2e7c \</span><br><span class="line">  192.168.99.100:2377</span><br><span class="line"></span><br><span class="line">This node joined a swarm as a worker.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>ssh回到管理节点，运行docker node ls命令来查看两个工作节点是否被成功加入集群，具体如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker node ls</span><br><span class="line">ID                           HOSTNAME  STATUS  AVAILABILITY  MANAGER STATUS</span><br><span class="line">03g1y59jwfg7cf99w4lt0f662    worker2   Ready   Active</span><br><span class="line">9j68exjopxe7wfl6yuxml7a7j    worker1   Ready   Active</span><br><span class="line">dxn1zf6l61qsb1josjja83ngz *  manager1  Ready   Active        Leader</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>部署服务到集群：</strong></p>
+<ul>
+<li><p>ssh连接到管理节点上</p>
+</li>
+<li><p>运行如下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker service create --replicas 1 --name helloworld alpine ping docker.com</span><br></pre></td></tr></table></figure>
+<p>docker service create: 用于创建服务的命令</p>
+<p>–name helloworld：服务名称叫做helloworld</p>
+<p>–replicas 1: 服务的任务副本（或者说容器数量）只保留一个副本</p>
+<p>alpine ：镜像名 ，代表 Alpine Linux container</p>
+<p>ping docker.com: 容器内运行的命令</p>
+</li>
+<li><p>运行docker service ls查看运行中的服务，具体如下图：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker service ls</span><br><span class="line"></span><br><span class="line">ID            NAME        SCALE  IMAGE   COMMAND</span><br><span class="line">9uk4639qpg7n  helloworld  1/1    alpine  ping docker.com</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>查看服务</strong>：</p>
+<p>查看服务详细信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[manager1]$ docker service inspect --pretty helloworld</span><br><span class="line"></span><br><span class="line">ID:		9uk4639qpg7npwf3fn2aasksr</span><br><span class="line">Name:		helloworld</span><br><span class="line">Service Mode:	REPLICATED</span><br><span class="line"> Replicas:		1</span><br><span class="line">Placement:</span><br><span class="line">UpdateConfig:</span><br><span class="line"> Parallelism:	1</span><br><span class="line">ContainerSpec:</span><br><span class="line"> Image:		alpine</span><br><span class="line"> Args:	ping docker.com</span><br><span class="line">Resources:</span><br><span class="line">Endpoint Mode:  vip</span><br></pre></td></tr></table></figure>
+<p>查看服务运行节点：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[manager1]$ docker service ps helloworld</span><br><span class="line"></span><br><span class="line">NAME                                    IMAGE   NODE     DESIRED STATE  CURRENT STATE           ERROR               PORTS</span><br><span class="line">helloworld.1.8p1vev3fq5zm0mi8g0as41w35  alpine  worker2  Running        Running 3 minutes</span><br></pre></td></tr></table></figure>
+<p>在服务运行节点上使用docker ps 查看运行中的容器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[worker2]$ docker ps</span><br><span class="line"></span><br><span class="line">CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES</span><br><span class="line">e609dde94e47        alpine:latest       <span class="string">"ping docker.com"</span>   3 minutes ago       Up 3 minutes                            helloworld.1.8p1vev3fq5zm0mi8g0as41w35</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>扩容服务：</strong></p>
+<ul>
+<li><p>使用 docker service scale <service-id>=<number-of-tasks> 来扩容，具体如下：</number-of-tasks></service-id></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker service scale helloworld=5</span><br><span class="line"></span><br><span class="line">helloworld scaled to 5</span><br></pre></td></tr></table></figure>
+<p>查看扩容后的结果：</p>
+</li>
+<li><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ docker service ps helloworld</span><br><span class="line"></span><br><span class="line">NAME                                    IMAGE   NODE      DESIRED STATE  CURRENT STATE</span><br><span class="line">helloworld.1.8p1vev3fq5zm0mi8g0as41w35  alpine  worker2   Running        Running 7 minutes</span><br><span class="line">helloworld.2.c7a7tcdq5s0uk3qr88mf8xco6  alpine  worker1   Running        Running 24 seconds</span><br><span class="line">helloworld.3.6crl09vdcalvtfehfh69ogfb1  alpine  worker1   Running        Running 24 seconds</span><br><span class="line">helloworld.4.auky6trawmdlcne8ad8phb0f1  alpine  manager1  Running        Running 24 seconds</span><br><span class="line">helloworld.5.ba19kca06l18zujfwxyc5lkyn  alpine  worker2   Running        Running 24 seconds</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>删除服务:</strong></p>
+<p>使用docker service rm 即可删除服务，具体如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker service rm helloworld</span><br><span class="line"></span><br><span class="line">helloworld</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>滚动更新服务</strong>：</p>
+<ul>
+<li><p>以redis 为例，先创建一个有三个副本的redis服务：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ docker service create \</span><br><span class="line">  --replicas 3 \</span><br><span class="line">  --name redis \</span><br><span class="line">  --update-delay 10s \</span><br><span class="line">  redis:3.0.6</span><br><span class="line"></span><br><span class="line">0u6a4s31ybk7yw2wyvtikmu50</span><br></pre></td></tr></table></figure>
+<p>注意通过–update-delay声明了服务更新的延迟时间为10秒，也可以通过 单独或组合使用10s,10m,10h来表示不同的延迟，比如10m30s代表十分三十秒</p>
+</li>
+<li><p>开始更新，将redis版本进行升级：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker service update --image redis:3.0.7 redis</span><br><span class="line">redis</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>升级过程中可以使用docker service inspect 来查看升级状况,如下图是升级失败：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">docker service inspect --pretty redis</span><br><span class="line"></span><br><span class="line">ID:             0u6a4s31ybk7yw2wyvtikmu50</span><br><span class="line">Name:           redis</span><br><span class="line">...snip...</span><br><span class="line">Update status:</span><br><span class="line"> State:      paused</span><br><span class="line"> Started:    11 seconds ago</span><br><span class="line"> Message:    update paused due to failure or early termination of task 9p7ith557h8ndf0ui9s0q951b</span><br><span class="line">...snip...</span><br></pre></td></tr></table></figure>
+<p>升级失败了重新运行升级命令docker service update redis即可</p>
+</li>
+<li><p>升级过程中可以使用docker service ps来查看升级状况，有的会是3.0.6 running,有的是3.0.7running,一旦升级完毕则全部都是3.0.7 running如下图 ：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ docker service ps redis</span><br><span class="line"></span><br><span class="line">NAME                                   IMAGE        NODE       DESIRED STATE  CURRENT STATE            ERROR</span><br><span class="line">redis.1.dos1zffgeofhagnve8w864fco      redis:3.0.7  worker1    Running        Running 37 seconds</span><br><span class="line"> \_ redis.1.88rdo6pa52ki8oqx6dogf04fh  redis:3.0.6  worker2    Shutdown       Shutdown 56 seconds ago</span><br><span class="line">redis.2.9l3i4j85517skba5o7tn5m8g0      redis:3.0.7  worker2    Running        Running About a minute</span><br><span class="line"> \_ redis.2.66k185wilg8ele7ntu8f6nj6i  redis:3.0.6  worker1    Shutdown       Shutdown 2 minutes ago</span><br><span class="line">redis.3.egiuiqpzrdbxks3wxgn8qib1g      redis:3.0.7  worker1    Running        Running 48 seconds</span><br><span class="line"> \_ redis.3.ctzktfddb2tepkr45qcmqln04  redis:3.0.6  mmanager1  Shutdown       Shutdown 2 minutes ago</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>排空一个节点</strong>：</p>
+<p>某些情况下要把某个节点下线或者关机时，需要先将节点上的tasks转移，这个过程就叫做排空,如下图</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker node update --availability drain worker1</span><br><span class="line"></span><br><span class="line">worker1</span><br></pre></td></tr></table></figure>
+<p>再运行docker service ps redis，可以看到worker1上的容器都停止了并在worker2上开了新的容器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ docker service ps redis</span><br><span class="line"></span><br><span class="line">NAME                                    IMAGE        NODE      DESIRED STATE  CURRENT STATE           ERROR</span><br><span class="line">redis.1.7q92v0nr1hcgts2amcjyqg3pq       redis:3.0.6  manager1  Running        Running 4 minutes</span><br><span class="line">redis.2.b4hovzed7id8irg1to42egue8       redis:3.0.6  worker2   Running        Running About a minute</span><br><span class="line"> \_ redis.2.7h2l8h3q3wqy5f66hlv9ddmi6   redis:3.0.6  worker1   Shutdown       Shutdown 2 minutes ago</span><br><span class="line">redis.3.9bg7cezvedmkgg6c8yzvbhwsd       redis:3.0.6  worker2   Running        Running 4 minutes</span><br></pre></td></tr></table></figure>
+<p>当你需要使排空的节点可用，运行以下命令即可，之后该节点就可以正常接受新的任务了：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker node update --availability active worker1</span><br><span class="line"></span><br><span class="line">worker1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>暴露服务端口</strong></p>
+<ul>
+<li>如docker中使用-p 8080:80一样，也可以使用同样的方式暴露服务端口，但下面的命令更为清晰：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker service create \</span><br><span class="line">  --name my-web \</span><br><span class="line">  --publish published=8080,target=80 \</span><br><span class="line">  --replicas 2 \</span><br><span class="line">  nginx</span><br></pre></td></tr></table></figure>
+<p><strong>之后你访问三台机器的 8080端口，都可以访问到nginx，即使那台机器上没有运行nginx的任务</strong>——这个特性被叫做routing mesh(路由混合)</p>
+<ul>
+<li>需要更新服务端口的话可以使用如下命令</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker service update \</span><br><span class="line">  --publish-add published=&lt;PUBLISHED-PORT&gt;,target=&lt;CONTAINER-PORT&gt; \</span><br><span class="line">  &lt;SERVICE&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>默认暴露的是TCP端口，如果要暴露UDP端口需要如下设置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ docker service create --name dns-cache \</span><br><span class="line">  --publish published=53,target=53 \</span><br><span class="line">  --publish published=53,target=53,protocol=udp \</span><br><span class="line">  dns-cache</span><br><span class="line">  或者</span><br><span class="line">$ docker service create --name dns-cache \</span><br><span class="line">  -p 53:53 \</span><br><span class="line">  -p 53:53/udp \</span><br><span class="line">  dns-cache</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>跳过路由混合：</p>
+<p>如果不想使用以上“访问三台机器的 8080端口，都可以访问到nginx，即使那台机器上没有运行nginx的任务”这个特性，可以通过对端口声明mode的方式进行控制，如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker service create --name dns-cache \</span><br><span class="line">  --publish published=53,target=53,protocol=udp,mode=host \</span><br><span class="line">  --mode global \</span><br><span class="line">  dns-cache</span><br></pre></td></tr></table></figure>
+<p>这种情况下，访问机器的53端口，就要求那台机器上必须要有运行中的task，并且访问的就是那个task</p>
+</li>
+</ul>
+</li>
+<li><p><strong>使用服务承载网络</strong>：</p>
+<p>如果集群中多个服务需要互相通讯，就可以使用承载网络，如下所示:</p>
+<ul>
+<li><p>先创建网络</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker network create --driver overlay my-network</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建服务时声明其所在网络</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker service create \</span><br><span class="line">  --replicas 3 \</span><br><span class="line">  --network my-network \</span><br><span class="line">  --name my-web \</span><br><span class="line">  nginx</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将已存在的服务加入到某个网络</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker service update --network-add my-network my-web</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="Docker-stack"><a href="#Docker-stack" class="headerlink" title="Docker stack"></a>Docker stack</h2><p><strong>Docker Compose缺点是不能在分布式多机器上使用；Docker swarm缺点是不能同时编排多个服务，所以才有了Docker Stack，可以在分布式多机器上同时编排多个服务。</strong>stack就是一组共用一个承载网络的服务的集合。</p>
+<p>例子：</p>
+<ol start="0">
+<li>Setup</li>
+</ol>
+<ul>
+<li>service1:</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloRest</span> </span>&#123;</span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/service1/getHello"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getHello</span><span class="params">()</span></span>&#123;</span><br><span class="line">        log.info(<span class="string">"service1!!!"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"hello from service1"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> openjdk:<span class="number">8</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8080</span></span><br><span class="line"><span class="keyword">ADD</span><span class="bash">  target/service1-0.0.1-SNAPSHOT.jar /demo.jar</span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="bash"> [<span class="string">"java"</span>, <span class="string">"-jar"</span>, <span class="string">"demo.jar"</span>]</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>service2:</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloRest</span> </span>&#123;</span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/service2/getHello"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getHello</span><span class="params">()</span></span>&#123;</span><br><span class="line">        log.info(<span class="string">"service2!!!"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"hello from service2"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> openjdk:<span class="number">8</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8081</span></span><br><span class="line"><span class="keyword">ADD</span><span class="bash">  target/service2-0.0.1-SNAPSHOT.jar /demo.jar</span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="bash"> [<span class="string">"java"</span>, <span class="string">"-jar"</span>, <span class="string">"demo.jar"</span>]</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>分别打包镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker build -t service1:V1 .</span><br><span class="line">docker build -t service2:V1 .</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编写docker-compose.yml文件</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">"3.9"</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  service1:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">"zhangjie47/service1:V1"</span></span><br><span class="line"><span class="attr">    deploy:</span></span><br><span class="line"><span class="attr">        replicas:</span> <span class="number">2</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">"8080:8080"</span></span><br><span class="line"></span><br><span class="line"><span class="attr">  service2:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">"zhangjie47/service2:V1"</span></span><br><span class="line"><span class="attr">    deploy:</span></span><br><span class="line"><span class="attr">        replicas:</span> <span class="number">3</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">"8081:8081"</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>stack 部署</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># myapps是stack的自定义名称，使用具体路径的compose配置文件进行部署</span></span><br><span class="line">docker stack deploy myapps --compose-file=docker-compose.yml</span><br><span class="line">或者</span><br><span class="line">docker stack deploy myapps -c docker-compose.yml</span><br><span class="line">Creating network myapps_default</span><br><span class="line">Creating service myapps_service1</span><br><span class="line">Creating service myapps_service2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看docker stack</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看所有stack的信息</span></span><br><span class="line">docker stack ls</span><br><span class="line">NAME      SERVICES   ORCHESTRATOR</span><br><span class="line">myapps    2          Swarm</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看某个stack中的所有任务信息</span></span><br><span class="line">docker stack ps myapps</span><br><span class="line">ID             NAME                IMAGE                    NODE      DESIRED STATE   CURRENT STATE</span><br><span class="line">tvvujrf3qcr1   myapps_service1.1   zhangjie47/service1:V1   node1     Running         Running 46 seconds ago       </span><br><span class="line">igjeydmmvzzm   myapps_service1.2   zhangjie47/service1:V1   manager   Running         Running 46 seconds ago       </span><br><span class="line">7p5c96eplwl3   myapps_service2.1   zhangjie47/service2:V1   node1     Running         Running 34 seconds ago       </span><br><span class="line">7shglsajip5d   myapps_service2.2   zhangjie47/service2:V1   manager   Running         Running 39 seconds ago       </span><br><span class="line">upo0mr7j9tn1   myapps_service2.3   zhangjie47/service2:V1   node2     Running         Preparing 41 seconds ago  </span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看某个stack中的所有服务信息</span></span><br><span class="line">docker stack services myapps</span><br><span class="line">ID             NAME              MODE         REPLICAS   IMAGE                    PORTS</span><br><span class="line">icz3kjn0skb3   myapps_service1   replicated   2/2        masonzhang/service1:V1   *:8080-&gt;8080/tcp</span><br><span class="line">myuzlwnrxag4   myapps_service2   replicated   3/3        masonzhang/service2:V1   *:8081-&gt;8081/tcp</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看具体服务信息等请参照上文</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 移除stack</span></span><br><span class="line">docker stack rm myapps</span><br><span class="line">Removing service myapps_service1</span><br><span class="line">Removing service myapps_service2</span><br><span class="line">Removing network myapps_default</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/docker/" rel="tag"># docker</a>
+          
+            <a href="/blog/tags/云原生/" rel="tag"># 云原生</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2022/11/23/Python项目容器化打包规范/" rel="next" title="Python项目容器化打包规范">
+                <i class="fa fa-chevron-left"></i> Python项目容器化打包规范
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">几时西风</p>
+              <div class="site-description motion-element" itemprop="description">但屈指，流年偷换。</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/blog/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/blog/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/blog/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hiram711" title="GitHub &rarr; https://github.com/Hiram711" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="mailto:371721772@qq.com" title="E-Mail &rarr; mailto:371721772@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i></a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-Swarm的介绍与使用"><span class="nav-number">1.</span> <span class="nav-text">Docker Swarm的介绍与使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#What"><span class="nav-number">1.1.</span> <span class="nav-text">What</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Key-Concepts"><span class="nav-number">1.2.</span> <span class="nav-text">Key Concepts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Why"><span class="nav-number">1.3.</span> <span class="nav-text">Why</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#How"><span class="nav-number">1.4.</span> <span class="nav-text">How</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-stack"><span class="nav-number">1.5.</span> <span class="nav-text">Docker stack</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">几时西风</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/blog/lib/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script src="/blog/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/blog/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/blog/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/blog/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+  
+  <script src="/blog/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/blog/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/blog/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/blog/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'manual') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+        if (result) $(this).text('复制成功');
+        else $(this).text('复制失败');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  
+
+</body>
+</html>
