@@ -621,6 +621,25 @@ HOST=10.88.1.12
 
 
 
+### docker-compose.yml中环境变量的优先级
+
+**需要区分两种环境变量，一种指传递到容器内部的环境变量，一种指docker-compose.yml文件中通过${}符号引用用于设置docker-compose的环境变量。**
+
+前者的优先级从低到高如下：
+
+1. docker-compose.yml中声明env_file
+2. docker-compose.yml声明environment
+
+后者的优先级从低到高如下：
+
+1. 同一目录下放一个.env文件
+
+2. 在/etc/profile或者在shell中通过export设置环境变量
+
+**注意，存在.env文件在前者和后者都使用的情况，此种情况各论各即可**
+
+
+
 ### 添加docker-compose.yml文件
 
 在项目根目录下添加docker-compose.yml文件
