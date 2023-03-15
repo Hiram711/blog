@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" href="/blog/lib/fancybox/source/jquery.fancybox.css">
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/blog/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Pisces',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Canal介绍与使用简介 canal [kə’næl]，译意为水道/管道/沟渠，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费 早期阿里巴巴因为杭州和美国双机房部署，存在跨机房同步的业务需求，实现方式主要是基于业务 trigger 获取增量变更。从 2010 年开始，业务逐步尝试数据库日志解析获取增量变更进行同步，由此衍生出了大量的数据库增量订阅和消费业务。 基于日志增量订">
+<meta name="keywords" content="canal">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Canal介绍与使用">
+<meta property="og:url" content="https://hiram711.github.io/2023/03/15/Canal介绍与使用/index.html">
+<meta property="og:site_name" content="几时">
+<meta property="og:description" content="Canal介绍与使用简介 canal [kə’næl]，译意为水道/管道/沟渠，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费 早期阿里巴巴因为杭州和美国双机房部署，存在跨机房同步的业务需求，实现方式主要是基于业务 trigger 获取增量变更。从 2010 年开始，业务逐步尝试数据库日志解析获取增量变更进行同步，由此衍生出了大量的数据库增量订阅和消费业务。 基于日志增量订">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://hiram711.github.io/blog/images/pasted-12.png">
+<meta property="og:image" content="https://hiram711.github.io/blog/images/pasted-13.png">
+<meta property="og:image" content="https://hiram711.github.io/blog/images/pasted-15.png">
+<meta property="og:image" content="https://hiram711.github.io/blog/images/pasted-16.png">
+<meta property="og:image" content="https://hiram711.github.io/blog/images/pasted-24.png">
+<meta property="og:image" content="https://hiram711.github.io/blog/images/pasted-19.png">
+<meta property="og:image" content="https://hiram711.github.io/blog/images/pasted-21.png">
+<meta property="og:image" content="https://hiram711.github.io/blog/images/pasted-22.png">
+<meta property="og:image" content="https://hiram711.github.io/blog/images/pasted-23.png">
+<meta property="og:updated_time" content="2023-03-15T06:40:30.748Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Canal介绍与使用">
+<meta name="twitter:description" content="Canal介绍与使用简介 canal [kə’næl]，译意为水道/管道/沟渠，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费 早期阿里巴巴因为杭州和美国双机房部署，存在跨机房同步的业务需求，实现方式主要是基于业务 trigger 获取增量变更。从 2010 年开始，业务逐步尝试数据库日志解析获取增量变更进行同步，由此衍生出了大量的数据库增量订阅和消费业务。 基于日志增量订">
+<meta name="twitter:image" content="https://hiram711.github.io/blog/images/pasted-12.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://hiram711.github.io/2023/03/15/Canal介绍与使用/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Canal介绍与使用 | 几时</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">几时</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/blog/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/blog/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/blog/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签<span class="badge">10</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/blog/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">5</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/blog/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档<span class="badge">10</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-commonweal">
+
+    
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/blog/404/" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>公益 404</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hiram711.github.io/blog/2023/03/15/Canal介绍与使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="几时西风">
+      <meta itemprop="description" content="但屈指，流年偷换。">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="几时">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Canal介绍与使用
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2023-03-15 14:31:00 / 修改时间：14:40:30" itemprop="dateCreated datePublished" datetime="2023-03-15T14:31:00+08:00">2023-03-15</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/数据同步/" itemprop="url" rel="index"><span itemprop="name">数据同步</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">14k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">13 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Canal介绍与使用"><a href="#Canal介绍与使用" class="headerlink" title="Canal介绍与使用"></a>Canal介绍与使用</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><img src="\blog\images\pasted-12.png" alt="upload successful"></p>
+<p><strong><a href="https://github.com/alibaba/canal" target="_blank" rel="noopener">canal</a> [kə’næl]</strong>，译意为水道/管道/沟渠，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费</p>
+<p>早期阿里巴巴因为杭州和美国双机房部署，存在跨机房同步的业务需求，实现方式主要是基于业务 trigger 获取增量变更。从 2010 年开始，业务逐步尝试数据库日志解析获取增量变更进行同步，由此衍生出了大量的数据库增量订阅和消费业务。</p>
+<p>基于日志增量订阅和消费的业务包括</p>
+<ul>
+<li>数据库镜像</li>
+<li>数据库实时备份</li>
+<li>索引构建和实时维护(拆分异构索引、倒排索引等)</li>
+<li>业务 cache 刷新</li>
+<li>带业务逻辑的增量数据处理</li>
+</ul>
+<p>当前的 canal 支持源端 MySQL 版本包括 5.1.x , 5.5.x , 5.6.x , 5.7.x , 8.0.x</p>
+<p><strong>注意：本文中使用的canal版本为1.1.7版本</strong></p>
+<p><strong>更多详细内容可以参考<a href="https://github.com/alibaba/canal/wiki" target="_blank" rel="noopener">Home · alibaba/canal Wiki (github.com)</a></strong></p>
+<h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><h3 id="MySQL主备复制原理"><a href="#MySQL主备复制原理" class="headerlink" title="MySQL主备复制原理"></a>MySQL主备复制原理</h3><p><img src="\blog\images\pasted-13.png" alt="upload successful"></p>
+<ul>
+<li>MySQL master 将数据变更写入二进制日志( binary log, 其中记录叫做二进制日志事件binary log events，可以通过 show binlog events 进行查看)</li>
+<li>MySQL slave 将 master 的 binary log events 拷贝到它的中继日志(relay log)</li>
+<li>MySQL slave 重放 relay log 中事件，将数据变更反映它自己的数据</li>
+</ul>
+<h3 id="canal-工作原理"><a href="#canal-工作原理" class="headerlink" title="canal 工作原理"></a>canal 工作原理</h3><ul>
+<li>canal 模拟 MySQL slave 的交互协议，伪装自己为 MySQL slave ，向 MySQL master 发送dump 协议</li>
+<li>MySQL master 收到 dump 请求，开始推送 binary log 给 slave (即 canal )</li>
+<li>canal 解析 binary log 对象(原始为 byte 流)</li>
+</ul>
+<h2 id="架构与概念"><a href="#架构与概念" class="headerlink" title="架构与概念"></a>架构与概念</h2><p><img src="\blog\images\pasted-15.png" alt="upload successful"></p>
+<ul>
+<li><strong>canal是一个CS架构的程序，因此分为<code>client</code>与<code>server</code>,其中<code>server</code>可以包含多个<code>instance</code></strong></li>
+<li><code>server</code>：代表一个canal运行实例，对应于一个jvm，本质是一个基于SpringBoot的Web项目（包含Netty和Embeded两种实现），可以通过接口启动、配置、调度、监控instance</li>
+<li><code>instance</code>：对应于一个数据队列，这个数据队列会完成解析binlog日志、binlog日志过滤、 binlog日志转储、位点元数据管理等核心功能,instance包含以下四个核心组件：<ul>
+<li><code>eventParser</code> :数据源接入，模拟slave协议和master进行交互，协议解析</li>
+<li><code>eventSink</code> :Parser和Store链接器，进行数据过滤，加工，分发的工作</li>
+<li><code>eventStore</code> :数据存储，目前仅实现了Memory内存模式</li>
+<li><code>metaManager</code> :增量订阅&amp;消费信息管理器</li>
+</ul>
+</li>
+<li><code>client</code>：消费数据的客户端，可以自己参考官方demo写java实现，也可以直接使用官方提供的工具包（CilentAdapter）</li>
+</ul>
+<h2 id="相关组件"><a href="#相关组件" class="headerlink" title="相关组件"></a>相关组件</h2><p><img src="\blog\images\pasted-16.png" alt="upload successful"></p>
+<ul>
+<li><p>canal.deployer:canal主体程序</p>
+</li>
+<li><p>canal.admin:canal 的Web版管理后台，可以通过图形化界面管理配置参数,从而动态启停 <code>Server</code> 和 <code>Instance</code>，本文对此不多做深入研究</p>
+</li>
+<li><p>canal.adapter:应当称为ClientAdapter,是在canal 1.1.1版本之后, 增加的客户端数据落地的适配及启动功能，目前支持功能:</p>
+<ul>
+<li>客户端启动器</li>
+<li>同步管理REST接口</li>
+<li>日志适配器, 作为DEMO</li>
+<li>关系型数据库的数据同步(表对表同步), ETL功能</li>
+<li>HBase的数据同步(表对表同步), ETL功能</li>
+<li>ElasticSearch多表数据同步,ETL功能</li>
+</ul>
+</li>
+</ul>
+<p><em>另外还有集群HA的解决方案，但是目前暂时够用未深入研究</em></p>
+<p><strong>一般来说，用一个server带起若干instance，再加上adapter已经足够普通用户的使用</strong></p>
+<h2 id="Server-QuickStart"><a href="#Server-QuickStart" class="headerlink" title="Server-QuickStart"></a>Server-QuickStart</h2><h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><ul>
+<li><p>纯java开发，windows/linux均可支持</p>
+</li>
+<li><p>jdk建议使用1.6.25以上的版本</p>
+</li>
+<li><p>对于自建 MySQL , 需要先开启 Binlog 写入功能，配置 binlog-format 为 ROW 模式，my.cnf 中配置如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">log-bin=mysql-bin # 开启 binlog</span><br><span class="line">binlog-format=ROW # 选择 ROW 模式</span><br><span class="line">server_id=1 # 配置 MySQL replaction 需要定义，不要和 canal 的 slaveId 重复</span><br></pre></td></tr></table></figure>
+<ul>
+<li>注意：针对阿里云 RDS for MySQL , 默认打开了 binlog , 并且账号默认具有 binlog dump 权限 , 不需要任何权限或者 binlog 设置,可以直接跳过这一步</li>
+</ul>
+</li>
+<li><p>授权 canal 链接 MySQL 账号具有作为 MySQL slave 的权限, 如果已有账户可直接 grant</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> canal <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'canal'</span>;  </span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">SELECT</span>, <span class="keyword">REPLICATION</span> <span class="keyword">SLAVE</span>, <span class="keyword">REPLICATION</span> <span class="keyword">CLIENT</span> <span class="keyword">ON</span> *.* <span class="keyword">TO</span> <span class="string">'canal'</span>@<span class="string">'%'</span>;</span><br><span class="line"><span class="comment">-- GRANT ALL PRIVILEGES ON *.* TO 'canal'@'%' ;</span></span><br><span class="line"><span class="keyword">FLUSH</span> <span class="keyword">PRIVILEGES</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><ul>
+<li><p>下载 canal, 访问 <a href="https://github.com/alibaba/canal/releases" target="_blank" rel="noopener">release 页面</a> , 选择需要的包下载, 如以 1.0.17 版本为例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/alibaba/canal/releases/download/canal-1.0.17/canal.deployer-1.0.17.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解压缩</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir /tmp/canal</span><br><span class="line">tar zxvf canal.deployer-<span class="variable">$version</span>.tar.gz  -C /tmp/canal</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>解压完成后，进入 /tmp/canal 目录，可以看到如下结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">drwxr-xr-x 2 jianghang jianghang  136 2013-02-05 21:51 bin</span><br><span class="line">drwxr-xr-x 4 jianghang jianghang  160 2013-02-05 21:51 conf</span><br><span class="line">drwxr-xr-x 2 jianghang jianghang 1.3K 2013-02-05 21:51 lib</span><br><span class="line">drwxr-xr-x 2 jianghang jianghang   48 2013-02-05 21:29 logs</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>配置修改</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi conf/example/instance.properties</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">## mysql serverId</span><br><span class="line">canal.instance.mysql.slaveId = 1234</span><br><span class="line">#position info，需要改成自己的数据库信息</span><br><span class="line">canal.instance.master.address = 127.0.0.1:3306 </span><br><span class="line">canal.instance.master.journal.name = </span><br><span class="line">canal.instance.master.position = </span><br><span class="line">canal.instance.master.timestamp = </span><br><span class="line">#canal.instance.standby.address = </span><br><span class="line">#canal.instance.standby.journal.name =</span><br><span class="line">#canal.instance.standby.position = </span><br><span class="line">#canal.instance.standby.timestamp = </span><br><span class="line">#username/password，需要改成自己的数据库信息</span><br><span class="line">canal.instance.dbUsername = canal  </span><br><span class="line">canal.instance.dbPassword = canal</span><br><span class="line">canal.instance.defaultDatabaseName =</span><br><span class="line">canal.instance.connectionCharset = UTF-8</span><br><span class="line">#table regex</span><br><span class="line">canal.instance.filter.regex = .\*\\\\..\*</span><br></pre></td></tr></table></figure>
+<ul>
+<li>canal.instance.connectionCharset 代表数据库的编码方式对应到 java 中的编码类型，比如 UTF-8，GBK , ISO-8859-1</li>
+<li>如果系统是1个 cpu，需要将 canal.instance.parser.parallel 设置为 false</li>
+</ul>
+</li>
+<li><p>启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh bin/startup.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看 server 日志</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi logs/canal/canal.log&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2013-02-05 22:45:27.967 [main] INFO  com.alibaba.otter.canal.deployer.CanalLauncher - ## start the canal server.</span><br><span class="line">2013-02-05 22:45:28.113 [main] INFO  com.alibaba.otter.canal.deployer.CanalController - ## start the canal server[10.1.29.120:11111]</span><br><span class="line">2013-02-05 22:45:28.210 [main] INFO  com.alibaba.otter.canal.deployer.CanalLauncher - ## the canal server is running now ......</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看 instance 的日志</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi logs/example/example.log</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2013-02-05 22:50:45.636 [main] INFO  c.a.o.c.i.spring.support.PropertyPlaceholderConfigurer - Loading properties file from class path resource [canal.properties]</span><br><span class="line">2013-02-05 22:50:45.641 [main] INFO  c.a.o.c.i.spring.support.PropertyPlaceholderConfigurer - Loading properties file from class path resource [example/instance.properties]</span><br><span class="line">2013-02-05 22:50:45.803 [main] INFO  c.a.otter.canal.instance.spring.CanalInstanceWithSpring - start CannalInstance for 1-example </span><br><span class="line">2013-02-05 22:50:45.810 [main] INFO  c.a.otter.canal.instance.spring.CanalInstanceWithSpring - start successful....</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>关闭</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh bin/stop.sh</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h3><ul>
+<li><p>base table不存在报错：<a href="[canal.deployer-1.1.6版本的安装包有bug · Issue #4245 · alibaba/canal (github.com">canal.deployer-1.1.6版本的安装包有bug #4245</a>](<a href="https://github.com/alibaba/canal/issues/4245)" target="_blank" rel="noopener">https://github.com/alibaba/canal/issues/4245)</a>)</p>
+<p><img src="\blog\images\pasted-24.png" alt="upload successful"></p>
+<p>问题原因：</p>
+<p>为了增加新功能而导致的源码包与发布包不一致，且发布包有问题，具体信息可参考下面的链接，</p>
+<p><a href="https://github.com/alibaba/canal/issues/4216" target="_blank" rel="noopener">兼容PolarDB-X的show databases返回 · Issue #4216 · alibaba/canal (github.com)</a></p>
+<p>解决办法：</p>
+<ul>
+<li>自己重新下载源码重新打包depolyer，源码中已将此问题修复，但是发布的包并没有</li>
+<li>在instance.properties中应用如下设置过滤掉所有schema中的BASE TABLE表</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">canal.instance.filter.black.regex=.*\\.BASE TABLE.*</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在instance.properties中应用如下设置只同步特定的表从而忽略BASE TABLE</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">canal.instance.filter.regex=aglaia.tb_member,aglaia.tb_member_card</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Adapter"><a href="#Adapter" class="headerlink" title="Adapter"></a>Adapter</h2><h3 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h3><p>client-adapter分为<code>适配器</code>和<code>启动器</code>两部分, 适配器为多个fat jar, 每个适配器会将自己所需的依赖打成一个包, 以SPI的方式让启动器动态加载, 目前所有支持的适配器都放置在plugin目录下</p>
+<p>启动器为 SpringBoot 项目, 支持canal-client启动的同时提供相关REST管理接口, 运行目录结构为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">- bin</span><br><span class="line">    restart.sh</span><br><span class="line">    startup.bat</span><br><span class="line">    startup.sh</span><br><span class="line">    stop.sh</span><br><span class="line">- lib</span><br><span class="line">   ...</span><br><span class="line">- plugin </span><br><span class="line">    client-adapter.logger-1.1.1-jar-with-dependencies.jar</span><br><span class="line">    client-adapter.hbase-1.1.1-jar-with-dependencies.jar</span><br><span class="line">    ...</span><br><span class="line">- conf</span><br><span class="line">    application.yml</span><br><span class="line">    - hbase</span><br><span class="line">        mytest_person2.yml</span><br><span class="line">- logs</span><br></pre></td></tr></table></figure>
+<h3 id="配置介绍"><a href="#配置介绍" class="headerlink" title="配置介绍"></a>配置介绍</h3><p>有两种方式可以对整个adapter进行配置，一种是使用总配置文件 application.yml，另一种则是使用bootstrap.yml将配置记录在数据库中</p>
+<h4 id="总配置文件-application-yml"><a href="#总配置文件-application-yml" class="headerlink" title="总配置文件 application.yml"></a>总配置文件 application.yml</h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">canal.conf:</span></span><br><span class="line"><span class="attr">  canalServerHost:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:11111</span>          <span class="comment"># 对应单机模式下的canal server的ip:port</span></span><br><span class="line"><span class="attr">  zookeeperHosts:</span> <span class="attr">slave1:2181</span>               <span class="comment"># 对应集群模式下的zk地址, 如果配置了canalServerHost, 则以canalServerHost为准</span></span><br><span class="line"><span class="attr">  mqServers:</span> <span class="attr">slave1:6667</span> <span class="comment">#or rocketmq       # kafka或rocketMQ地址, 与canalServerHost不能并存</span></span><br><span class="line"><span class="attr">  flatMessage:</span> <span class="literal">true</span>                         <span class="comment"># 扁平message开关, 是否以json字符串形式投递数据, 仅在kafka/rocketMQ模式下有效</span></span><br><span class="line"><span class="attr">  batchSize:</span> <span class="number">50</span>                             <span class="comment"># 每次获取数据的批大小, 单位为K</span></span><br><span class="line"><span class="attr">  syncBatchSize:</span> <span class="number">1000</span>                       <span class="comment"># 每次同步的批数量</span></span><br><span class="line"><span class="attr">  retries:</span> <span class="number">0</span>                                <span class="comment"># 重试次数, -1为无限重试</span></span><br><span class="line"><span class="attr">  timeout:</span>                                  <span class="comment"># 同步超时时间, 单位毫秒</span></span><br><span class="line"><span class="attr">  mode:</span> <span class="string">tcp</span> <span class="comment"># kafka rocketMQ                # canal client的模式: tcp kafka rocketMQ</span></span><br><span class="line"><span class="attr">  srcDataSources:</span>                           <span class="comment"># 源数据库</span></span><br><span class="line"><span class="attr">    defaultDS:</span>                              <span class="comment"># 自定义名称</span></span><br><span class="line"><span class="attr">      url:</span> <span class="attr">jdbc:mysql://127.0.0.1:3306/mytest?useUnicode=true</span>   <span class="comment"># jdbc url </span></span><br><span class="line"><span class="attr">      username:</span> <span class="string">root</span>                                            <span class="comment"># jdbc 账号</span></span><br><span class="line"><span class="attr">      password:</span> <span class="number">121212</span>                                          <span class="comment"># jdbc 密码</span></span><br><span class="line"><span class="attr">  canalAdapters:</span>                            <span class="comment"># 适配器列表</span></span><br><span class="line"><span class="attr">  - instance:</span> <span class="string">example</span>                       <span class="comment"># canal 实例名或者 MQ topic 名</span></span><br><span class="line"><span class="attr">    groups:</span>                                 <span class="comment"># 分组列表</span></span><br><span class="line"><span class="attr">    - groupId:</span> <span class="string">g1</span>                           <span class="comment"># 分组id, 如果是MQ模式将用到该值</span></span><br><span class="line"><span class="attr">      outerAdapters:</span>                        <span class="comment"># 分组内适配器列表</span></span><br><span class="line"><span class="attr">      - name:</span> <span class="string">logger</span>                        <span class="comment"># 日志打印适配器</span></span><br><span class="line"><span class="string">......</span></span><br></pre></td></tr></table></figure>
+<p>说明:</p>
+<ol>
+<li>一份数据可以被多个group同时消费, 多个group之间会是一个并行执行, 一个group内部是一个串行执行多个outerAdapters, 比如例子中logger和hbase</li>
+<li>目前client adapter数据订阅的方式支持两种，直连canal server 或者 订阅kafka/RocketMQ的消息</li>
+</ol>
+<h4 id="使用远程配置-Mysql"><a href="#使用远程配置-Mysql" class="headerlink" title="使用远程配置(Mysql)"></a>使用远程配置(Mysql)</h4><ol>
+<li>创建mysql schema</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">SCHEMA</span> <span class="string">`canal_manager`</span> <span class="keyword">DEFAULT</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8mb4 ;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>初始化数据</li>
+</ol>
+<p>使用<a href="https://raw.githubusercontent.com/alibaba/canal/master/admin/admin-web/src/main/resources/canal_manager.sql" target="_blank" rel="noopener">canal_manager.sql</a>脚本建表并初始化Demo数据，其中canal_config表id=2的数据对应adapter下的application.yml文件，canal_adapter_config表对应每个adapter的子配置文件</p>
+<ol start="3">
+<li>修改bootstrap.yml配置</li>
+</ol>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">canal:</span></span><br><span class="line"><span class="attr">  manager:</span></span><br><span class="line"><span class="attr">    jdbc:</span></span><br><span class="line"><span class="attr">      url:</span> <span class="attr">jdbc:mysql://127.0.0.1:3306/canal_manager?useUnicode=true&amp;characterEncoding=UTF-8</span></span><br><span class="line"><span class="attr">      username:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">      password:</span> <span class="number">121212</span></span><br></pre></td></tr></table></figure>
+<p>可以将本地application.yml文件和其他子配置文件删除或清空， 启动工程将自动从远程加载配置</p>
+<p>修改mysql中的配置信息后会自动刷新到本地动态加载相应的实例或者应用</p>
+<h3 id="QuickStart"><a href="#QuickStart" class="headerlink" title="QuickStart"></a>QuickStart</h3><ol>
+<li><p>启动canal server</p>
+</li>
+<li><p>修改conf/application.yml为:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8081</span></span><br><span class="line"><span class="attr">logging:</span></span><br><span class="line"><span class="attr">  level:</span></span><br><span class="line">    <span class="string">com.alibaba.otter.canal.client.adapter.hbase:</span> <span class="string">DEBUG</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  jackson:</span></span><br><span class="line"><span class="attr">    date-format:</span> <span class="string">yyyy-MM-dd</span> <span class="attr">HH:mm:ss</span></span><br><span class="line"><span class="attr">    time-zone:</span> <span class="string">GMT+8</span></span><br><span class="line"><span class="attr">    default-property-inclusion:</span> <span class="string">non_null</span></span><br><span class="line"></span><br><span class="line"><span class="string">canal.conf:</span></span><br><span class="line"><span class="attr">  canalServerHost:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:11111</span></span><br><span class="line"><span class="attr">  batchSize:</span> <span class="number">500</span>                            </span><br><span class="line"><span class="attr">  syncBatchSize:</span> <span class="number">1000</span>                       </span><br><span class="line"><span class="attr">  retries:</span> <span class="number">0</span>                               </span><br><span class="line"><span class="attr">  timeout:</span>                                 </span><br><span class="line"><span class="attr">  mode:</span> <span class="string">tcp</span> </span><br><span class="line"><span class="attr">  canalAdapters:</span>                            </span><br><span class="line"><span class="attr">  - instance:</span> <span class="string">example</span>                       </span><br><span class="line"><span class="attr">    groups:</span>                                 </span><br><span class="line"><span class="attr">    - groupId:</span> <span class="string">g1</span>                           </span><br><span class="line"><span class="attr">      outerAdapters:</span>                        </span><br><span class="line"><span class="attr">      - name:</span> <span class="string">logger</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/startup.sh</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="adapter管理REST接口"><a href="#adapter管理REST接口" class="headerlink" title="adapter管理REST接口"></a>adapter管理REST接口</h3><ol>
+<li>查询所有订阅同步的canal instance或MQ topic</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://127.0.0.1:8081/destinations</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>数据同步开关</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://127.0.0.1:8081/syncSwitch/example/off -X PUT</span><br></pre></td></tr></table></figure>
+<p>针对 example 这个canal instance/MQ topic 进行开关操作. off代表关闭, instance/topic下的同步将阻塞或者断开连接不再接收数据, on代表开启</p>
+<p>注: 如果在配置文件中配置了 zookeeperHosts 项, 则会使用分布式锁来控制HA中的数据同步开关, 如果是单机模式则使用本地锁来控制开关</p>
+<ol start="3">
+<li>数据同步开关状态</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://127.0.0.1:8081/syncSwitch/example</span><br></pre></td></tr></table></figure>
+<p>查看指定 canal instance/MQ topic 的数据同步开关状态</p>
+<ol start="4">
+<li>手动ETL</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://127.0.0.1:8081/etl/hbase/mytest_person2.yml -X POST -d <span class="string">"params=2018-10-21 00:00:00"</span></span><br></pre></td></tr></table></figure>
+<p>导入数据到指定类型的库, 如果params参数为空则全表导入, 参数对应的查询条件在配置中的etlCondition指定</p>
+<ol start="5">
+<li>查看相关库总数据</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://127.0.0.1:8081/count/hbase/mytest_person2.yml</span><br></pre></td></tr></table></figure>
+<h3 id="适配器列表"><a href="#适配器列表" class="headerlink" title="适配器列表"></a>适配器列表</h3><h4 id="logger适配器"><a href="#logger适配器" class="headerlink" title="logger适配器"></a>logger适配器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">最简单的处理, 将受到的变更事件通过日志打印的方式进行输出, 如配置所示, 只需要定义name: logger即可</span><br><span class="line">...</span><br><span class="line">      outerAdapters:                        </span><br><span class="line">      - name: logger</span><br></pre></td></tr></table></figure>
+<h4 id="Hbase适配器"><a href="#Hbase适配器" class="headerlink" title="Hbase适配器"></a>Hbase适配器</h4><p>同步HBase配置 : <a href="https://github.com/alibaba/canal/wiki/Sync-HBase" target="_blank" rel="noopener">Sync-HBase</a></p>
+<h4 id="RDB适配器"><a href="#RDB适配器" class="headerlink" title="RDB适配器"></a>RDB适配器</h4><p>同步关系型数据库配置 : <a href="https://github.com/alibaba/canal/wiki/Sync-RDB" target="_blank" rel="noopener">Sync-RDB</a></p>
+<p>目前内置支持的数据库列表:</p>
+<ol>
+<li>MySQL</li>
+<li>Oracle</li>
+<li>PostgresSQL</li>
+<li>SQLServer</li>
+</ol>
+<p>使用了JDBC driver,理论上支持绝大部分的关系型数据库</p>
+<h4 id="ES适配器"><a href="#ES适配器" class="headerlink" title="ES适配器"></a>ES适配器</h4><p>同步关ES配置 : <a href="https://github.com/alibaba/canal/wiki/Sync-ES" target="_blank" rel="noopener">Sync-ES</a></p>
+<h4 id="MongoDB适配器"><a href="#MongoDB适配器" class="headerlink" title="MongoDB适配器"></a>MongoDB适配器</h4><h4 id="Redis适配器"><a href="#Redis适配器" class="headerlink" title="Redis适配器"></a>Redis适配器</h4><h3 id="RDB适配器与PostgreSQL配合使用"><a href="#RDB适配器与PostgreSQL配合使用" class="headerlink" title="RDB适配器与PostgreSQL配合使用"></a>RDB适配器与PostgreSQL配合使用</h3><h4 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h4><ol>
+<li>修改启动器配置conf/application.yml</li>
+</ol>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8081</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  jackson:</span></span><br><span class="line"><span class="attr">    date-format:</span> <span class="string">yyyy-MM-dd</span> <span class="attr">HH:mm:ss</span></span><br><span class="line"><span class="attr">    time-zone:</span> <span class="string">GMT+8</span></span><br><span class="line"><span class="attr">    default-property-inclusion:</span> <span class="string">non_null</span></span><br><span class="line"></span><br><span class="line"><span class="string">canal.conf:</span></span><br><span class="line"><span class="attr">  mode:</span> <span class="string">tcp</span> <span class="comment">#tcp kafka rocketMQ rabbitMQ</span></span><br><span class="line"><span class="attr">  flatMessage:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  zookeeperHosts:</span></span><br><span class="line"><span class="attr">  syncBatchSize:</span> <span class="number">1000</span></span><br><span class="line"><span class="attr">  retries:</span> <span class="number">3</span></span><br><span class="line"><span class="attr">  timeout:</span> <span class="number">10</span></span><br><span class="line"><span class="attr">  accessKey:</span></span><br><span class="line"><span class="attr">  secretKey:</span></span><br><span class="line"><span class="attr">  consumerProperties:</span></span><br><span class="line">    <span class="comment"># canal tcp consumer</span></span><br><span class="line">    <span class="string">canal.tcp.server.host:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:11111</span></span><br><span class="line">    <span class="string">canal.tcp.zookeeper.hosts:</span></span><br><span class="line">    <span class="string">canal.tcp.batch.size:</span> <span class="number">500</span></span><br><span class="line">    <span class="string">canal.tcp.username:</span></span><br><span class="line">    <span class="string">canal.tcp.password:</span></span><br><span class="line">    <span class="comment"># kafka consumer</span></span><br><span class="line">    <span class="string">kafka.bootstrap.servers:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:9092</span></span><br><span class="line">    <span class="string">kafka.enable.auto.commit:</span> <span class="literal">false</span></span><br><span class="line">    <span class="string">kafka.auto.commit.interval.ms:</span> <span class="number">1000</span></span><br><span class="line">    <span class="string">kafka.auto.offset.reset:</span> <span class="string">latest</span></span><br><span class="line">    <span class="string">kafka.request.timeout.ms:</span> <span class="number">40000</span></span><br><span class="line">    <span class="string">kafka.session.timeout.ms:</span> <span class="number">30000</span></span><br><span class="line">    <span class="string">kafka.isolation.level:</span> <span class="string">read_committed</span></span><br><span class="line">    <span class="string">kafka.max.poll.records:</span> <span class="number">1000</span></span><br><span class="line">    <span class="comment"># rocketMQ consumer</span></span><br><span class="line">    <span class="string">rocketmq.namespace:</span></span><br><span class="line">    <span class="string">rocketmq.namesrv.addr:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:9876</span></span><br><span class="line">    <span class="string">rocketmq.batch.size:</span> <span class="number">1000</span></span><br><span class="line">    <span class="string">rocketmq.enable.message.trace:</span> <span class="literal">false</span></span><br><span class="line">    <span class="string">rocketmq.customized.trace.topic:</span></span><br><span class="line">    <span class="string">rocketmq.access.channel:</span></span><br><span class="line">    <span class="string">rocketmq.subscribe.filter:</span></span><br><span class="line">    <span class="comment"># rabbitMQ consumer</span></span><br><span class="line">    <span class="string">rabbitmq.host:</span></span><br><span class="line">    <span class="string">rabbitmq.virtual.host:</span></span><br><span class="line">    <span class="string">rabbitmq.username:</span></span><br><span class="line">    <span class="string">rabbitmq.password:</span></span><br><span class="line">    <span class="string">rabbitmq.resource.ownerId:</span></span><br><span class="line"><span class="attr">  srcDataSources:</span> <span class="comment">#导出数据的mysql数据源配置，后续会在表映射配置文件中使用到</span></span><br><span class="line"><span class="attr">    defaultDS:</span></span><br><span class="line"><span class="attr">      url:</span> <span class="attr">jdbc:mysql://127.0.0.1:3306/mytest?useUnicode=true</span></span><br><span class="line"><span class="attr">      username:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">      password:</span> <span class="number">121212</span></span><br><span class="line"><span class="attr">  canalAdapters:</span></span><br><span class="line"><span class="attr">  - instance:</span> <span class="string">example</span> <span class="comment"># canal instance Name or mq topic name</span></span><br><span class="line"><span class="attr">    groups:</span></span><br><span class="line"><span class="attr">    - groupId:</span> <span class="string">g1</span></span><br><span class="line"><span class="attr">      outerAdapters:</span></span><br><span class="line"><span class="attr">      - name:</span> <span class="string">logger</span></span><br><span class="line"><span class="attr">      - name:</span> <span class="string">rdb</span> <span class="comment"># 指定为rdb类型同步</span></span><br><span class="line"><span class="attr">        key:</span> <span class="string">postgres1</span>  <span class="comment"># 指定adapter的唯一key, 与表映射配置文件中outerAdapterKey对应</span></span><br><span class="line"><span class="attr">        properties:</span> <span class="comment">#目标数据库的链接信息</span></span><br><span class="line">          <span class="string">jdbc.driverClassName:</span> <span class="string">org.postgresql.Driver</span> <span class="comment"># jdbc驱动名, 部分jdbc的jar包需要自行放致lib目录下</span></span><br><span class="line">          <span class="string">jdbc.url:</span> <span class="attr">jdbc:postgresql://localhost:5432/postgres</span> <span class="comment"># jdbc url</span></span><br><span class="line">          <span class="string">jdbc.username:</span> <span class="string">postgres</span> <span class="comment"># jdbc username</span></span><br><span class="line">          <span class="string">jdbc.password:</span> <span class="number">121212</span> <span class="comment"># jdbc password</span></span><br><span class="line"><span class="attr">          threads:</span> <span class="number">1</span>  <span class="comment"># 并行执行的线程数, 默认为1</span></span><br><span class="line"><span class="attr">          commitSize:</span> <span class="number">3000</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li><p>修改 conf/rdb/mytest_user.yml文件</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">dataSourceKey:</span> <span class="string">defaultDS</span>        <span class="comment"># 源数据源的key, 对应上面配置的srcDataSources中的值</span></span><br><span class="line"><span class="attr">destination:</span> <span class="string">example</span>            <span class="comment"># cannal的instance或者MQ的topic</span></span><br><span class="line"><span class="attr">groupId:</span> <span class="string">g1</span>                     <span class="comment"># 对应MQ模式下的groupId, 只会同步对应groupId的数据</span></span><br><span class="line"><span class="attr">outerAdapterKey:</span> <span class="string">postgres1</span>      <span class="comment"># adapter key, 对应上面配置outAdapters中的key</span></span><br><span class="line"><span class="attr">concurrent:</span> <span class="literal">true</span>                <span class="comment"># 是否按主键hash并行同步, 并行同步的表必须保证主键不会更改及主键不能为其他同步表的外键!!</span></span><br><span class="line"><span class="attr">dbMapping:</span></span><br><span class="line"><span class="attr">  database:</span> <span class="string">mytest</span>              <span class="comment"># 源数据源的database/shcema</span></span><br><span class="line"><span class="attr">  table:</span> <span class="string">user</span>                   <span class="comment"># 源数据源表名</span></span><br><span class="line"><span class="attr">  targetTable:</span> <span class="string">ods.tb_user</span>   <span class="comment"># 目标数据源的模式名.表名</span></span><br><span class="line"><span class="attr">  targetPk:</span>                     <span class="comment"># 主键映射</span></span><br><span class="line"><span class="attr">    id:</span> <span class="string">id</span>                      <span class="comment"># 如果是复合主键可以换行映射多个</span></span><br><span class="line">  <span class="comment">#mapAll: true                 # 是否整表映射, 要求源表和目标表字段名一模一样 (如果targetColumns也配置了映射,则以targetColumns配置为准)</span></span><br><span class="line"><span class="attr">  targetColumns:</span>                <span class="comment"># 字段映射, 格式: 目标表字段: 源表字段, 如果字段名一样源表字段名可不填</span></span><br><span class="line"><span class="attr">    id:</span></span><br><span class="line"><span class="attr">    name:</span></span><br><span class="line"><span class="attr">    role_id:</span></span><br><span class="line"><span class="attr">    c_time:</span></span><br><span class="line"><span class="attr">    test1:</span> </span><br><span class="line">  <span class="comment">#etlCondition: "where c_time&gt;=&#123;&#125;"</span></span><br><span class="line"><span class="attr">  commitBatch:</span> <span class="number">3000</span> <span class="comment"># 批量提交的大小</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动RDB程序</p>
+<ul>
+<li><p>将目标库的jdbc jar包放入lib文件夹, 这里放入ojdbc6.jar (如果是其他数据库则放入对应的驱动)</p>
+</li>
+<li><p>启动canal-adapter启动器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/startup.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>全量同步一遍数据</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://127.0.0.1:8081/etl/rdb/mytest_user.yml -X POST</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>确认RDB是否增长运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://127.0.0.1:8081/destinations</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="踩坑-1"><a href="#踩坑-1" class="headerlink" title="踩坑"></a>踩坑</h4><ul>
+<li><p>全量同步报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ERROR c.a.otter.canal.client.adapter.rdb.service.RdbEtlService - org.postgresql.util.PSQLException: Fetch size must be a value greater to or equal to 0.</span><br><span class="line">java.lang.RuntimeException: org.postgresql.util.PSQLException: Fetch size must be a value greater to or equal to 0.</span><br></pre></td></tr></table></figure>
+<p>问题原因：</p>
+<p>错误设置postgres数据库的FetchSize</p>
+<p><a href="https://github.com/alibaba/canal/issues/2146" target="_blank" rel="noopener">postgres全量同步报错 · Issue #2146 · alibaba/canal (github.com)</a></p>
+<p>解决办法：</p>
+<p>修改client-adapter/common/src/main/java/com/alibaba/otter/canal/client/adapter/support/Util.java文件第41行和第55行，如下图所示</p>
+<p><img src="\blog\images\pasted-19.png" alt="upload successful"></p>
+<p><strong>此问题目前只能通过此方式解决，需要自己自己修改源码后重新打包</strong></p>
+</li>
+<li><p>同步报错：某字段 not matched</p>
+<p>问题原因：</p>
+<p>sql关键字错误，误认为所有数据库的表名都可以用mysql下列形式表示，导致字段全都无法匹配</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`dbname`.`tablename`</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/alibaba/canal/issues/2941" target="_blank" rel="noopener">adapter 同步到目标库 报错Target column: id not matched · Issue #2941 · alibaba/canal (github.com)</a></p>
+<p>经调查，根据issue内的方法直接改client-adapter/rdb/src/main/java/com/alibaba/otter/canal/client/adapter/rdb/support/SyncUtil.java中的getDBTableName和getBacktickByDbType方法是无用的，因为该方法其实并没有错误如下图<br><img src="\blog\images\pasted-21.png" alt="upload successful"><br> 需要修改的是client-adapter/rdb/src/main/java/com/alibaba/otter/canal/client/adapter/rdb/service/RdbEtlService.java中的executeSqlImport方法，此方法中错误的将需要使用目标数据源的地方用了源头数据源，导致了关键字全部按照mysql的方法进行拼接，最终导致错误，因此需要做如下修改：</p>
+<p><img src="\blog\images\pasted-22.png" alt="upload successful"></p>
+<p><img src="\blog\images\pasted-23.png" alt="upload successful"></p>
+<p>做完以上修改后，重新运行如下打包命令,然后在项目根目录的target文件夹下找到对应的包重新部署：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn clean install -Dmaven.test.skip -Denv=release</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/canal/" rel="tag"># canal</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2022/12/18/Docker-Swarm的介绍与使用/" rel="next" title="Docker Swarm的介绍与使用">
+                <i class="fa fa-chevron-left"></i> Docker Swarm的介绍与使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">几时西风</p>
+              <div class="site-description motion-element" itemprop="description">但屈指，流年偷换。</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/blog/archives/">
+                
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/blog/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/blog/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Hiram711" title="GitHub &rarr; https://github.com/Hiram711" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="mailto:371721772@qq.com" title="E-Mail &rarr; mailto:371721772@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i></a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Canal介绍与使用"><span class="nav-number">1.</span> <span class="nav-text">Canal介绍与使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工作原理"><span class="nav-number">1.2.</span> <span class="nav-text">工作原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL主备复制原理"><span class="nav-number">1.2.1.</span> <span class="nav-text">MySQL主备复制原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#canal-工作原理"><span class="nav-number">1.2.2.</span> <span class="nav-text">canal 工作原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#架构与概念"><span class="nav-number">1.3.</span> <span class="nav-text">架构与概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关组件"><span class="nav-number">1.4.</span> <span class="nav-text">相关组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Server-QuickStart"><span class="nav-number">1.5.</span> <span class="nav-text">Server-QuickStart</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#准备"><span class="nav-number">1.5.1.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动"><span class="nav-number">1.5.2.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#踩坑"><span class="nav-number">1.5.3.</span> <span class="nav-text">踩坑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adapter"><span class="nav-number">1.6.</span> <span class="nav-text">Adapter</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#整体结构"><span class="nav-number">1.6.1.</span> <span class="nav-text">整体结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置介绍"><span class="nav-number">1.6.2.</span> <span class="nav-text">配置介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总配置文件-application-yml"><span class="nav-number">1.6.2.1.</span> <span class="nav-text">总配置文件 application.yml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用远程配置-Mysql"><span class="nav-number">1.6.2.2.</span> <span class="nav-text">使用远程配置(Mysql)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QuickStart"><span class="nav-number">1.6.3.</span> <span class="nav-text">QuickStart</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#adapter管理REST接口"><span class="nav-number">1.6.4.</span> <span class="nav-text">adapter管理REST接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#适配器列表"><span class="nav-number">1.6.5.</span> <span class="nav-text">适配器列表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#logger适配器"><span class="nav-number">1.6.5.1.</span> <span class="nav-text">logger适配器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hbase适配器"><span class="nav-number">1.6.5.2.</span> <span class="nav-text">Hbase适配器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RDB适配器"><span class="nav-number">1.6.5.3.</span> <span class="nav-text">RDB适配器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ES适配器"><span class="nav-number">1.6.5.4.</span> <span class="nav-text">ES适配器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MongoDB适配器"><span class="nav-number">1.6.5.5.</span> <span class="nav-text">MongoDB适配器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis适配器"><span class="nav-number">1.6.5.6.</span> <span class="nav-text">Redis适配器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RDB适配器与PostgreSQL配合使用"><span class="nav-number">1.6.6.</span> <span class="nav-text">RDB适配器与PostgreSQL配合使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#操作步骤"><span class="nav-number">1.6.6.1.</span> <span class="nav-text">操作步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#踩坑-1"><span class="nav-number">1.6.6.2.</span> <span class="nav-text">踩坑</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">几时西风</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/blog/lib/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script src="/blog/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/blog/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/blog/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/blog/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+  
+  <script src="/blog/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/blog/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/blog/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/blog/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'manual') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+        if (result) $(this).text('复制成功');
+        else $(this).text('复制失败');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  
+
+</body>
+</html>
