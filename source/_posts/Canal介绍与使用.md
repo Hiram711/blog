@@ -611,8 +611,20 @@ canal.conf:
   ```bash
   mvn clean install -Dmaven.test.skip -Denv=release
   ```
-
   
-
-  
-
+- 全量同步报错：
+  ```bash
+  ERROR c.a.otter.canal.client.adapter.rdb.service.RdbEtlService - com.alibaba.druid.pool.GetConnectionTimeoutException: wait millis 60000, active 3, maxActive 3, creating 0
+java.lang.RuntimeException: com.alibaba.druid.pool.GetConnectionTimeoutException: wait millis 60000, active 3, maxActive 3, creating 0
+  ```
+  问题原因：默认连接池最大值设置只有三个，数据量大，线程多的情况下就会报错
+  解决办法：修改application.yml中srcDataSources下对应dataSource的最大连接数，如下图：
+  ```yaml
+  srcDataSources:
+    defaultDS:
+      url: 这里填源数据库的jdbc连接信息，例：jdbc:mysql://127.0.0.1:3306/testdb
+      username: 数据库账号，例：root
+      password: 数据库密码，例：root
+      maxActive: 100 #额外增加这一行，默认的连接数只有3，会导致全量同步出现异常，导致全量同步数据缺失，最好改大一点
+  canalAdapters:
+  ```
