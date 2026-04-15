@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat)",
+      "Bash(bash /tmp/extract_versions.sh)",
+      "Bash(nvm use *)",
+      "Bash(export PATH=\"/c/nvm4w/nodejs:$PATH\")",
+      "Bash(npm install *)"
+    ]
+  }
+}

@@ -1,0 +1,127 @@
+# NexT v8 Theme Configuration
+# Docs: https://theme-next.js.org/docs/
+
+# Scheme
+scheme: Pisces
+
+# Dark Mode
+darkmode: false
+
+# Cache
+cache:
+  enable: true
+
+# Favicon
+favicon:
+  small: /images/favicon-16x16-next.png
+  medium: /images/favicon-32x32-next.png
+  apple_touch_icon: /images/apple-touch-icon-next.png
+  safari_pinned_tab: /images/logo.svg
+
+# Footer
+footer:
+  powered: false
+  theme:
+    enable: false
+
+# Creative Commons
+creative_commons:
+  license: by-nc-sa
+  sidebar: false
+  post: false
+
+# Menu
+menu:
+  home: / || fa fa-home
+  about: /about/ || fa fa-user
+  tags: /tags/ || fa fa-tags
+  categories: /categories/ || fa fa-th
+  archives: /archives/ || fa fa-archive
+  commonweal: /404/ || fa fa-heartbeat
+
+menu_settings:
+  icons: true
+  badges: true
+
+# Sidebar
+sidebar:
+  position: left
+  display: post
+  offset: 12
+
+# Sidebar Avatar
+avatar:
+  rounded: false
+  opacity: 1
+  rotated: false
+
+# Social Links
+social:
+  GitHub: https://github.com/Hiram711 || fab fa-github
+  E-Mail: mailto:371721772@qq.com || fa fa-envelope
+
+social_icons:
+  enable: true
+  icons_only: true
+  transition: true
+
+# Site State
+site_state: true
+
+# Table of Contents
+toc:
+  enable: true
+  number: true
+  wrap: false
+  expand_all: false
+  max_depth: 6
+
+# Back to Top
+back2top:
+  enable: true
+  sidebar: true
+  scrollpercent: true
+
+# Post Settings
+post_meta:
+  item_text: true
+  created_at: true
+  updated_at:
+    enable: true
+    another_day: true
+  categories: true
+
+# Symbols Count Time
+symbols_count_time:
+  separated_meta: true
+  item_text_post: true
+  item_text_total: false
+  awl: 4
+  wpm: 275
+
+# Codeblock
+codeblock:
+  copy_button:
+    enable: true
+    show_result: true
+
+# Local Search
+local_search:
+  enable: true
+  trigger: manual
+  top_n_per_article: 1
+  unescape: false
+
+# Motion
+motion:
+  enable: true
+  async: false
+  transition:
+    post_block: fadeIn
+    post_header: slideDownIn
+    post_body: slideDownIn
+    coll_header: slideLeftIn
+    sidebar: slideUpIn
+
+# Fancybox
+fancybox: true
