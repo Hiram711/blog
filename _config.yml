@@ -92,8 +92,15 @@ search:
   format: html
   limit: 10000
 
-#hexo-wordcount 
+#hexo-wordcount
 symbols_count_time:
   symbols: true
   time: true
+
+#hexo-excerpt
+excerpt:
+  depth: 5
+  excerpt_excludes: []
+  more_excludes: []
+  hideWholePostExcerpts: true
 
