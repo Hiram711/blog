@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(where nvm *)",
+      "Bash(where node *)",
+      "Bash(npm -v)"
+    ]
+  }
+}
